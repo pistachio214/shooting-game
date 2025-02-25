@@ -16,6 +16,8 @@ public partial class BaseBullet : Node2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		//TODO 子弹超出可视范围就销毁
+
 		GlobalPosition += dir * (float)delta * speed;
 	}
 }
