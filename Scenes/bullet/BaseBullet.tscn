@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://2vw7qh2p8ruh"]
+
+[ext_resource type="Script" path="res://Scenes/bullet/BaseBullet.cs" id="1_gcgyt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v4gx4"]
+size = Vector2(6, 2)
+
+[node name="BaseBullet" type="Node2D"]
+script = ExtResource("1_gcgyt")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -3.0
+offset_top = -1.0
+offset_right = 3.0
+offset_bottom = 1.0
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_v4gx4")
