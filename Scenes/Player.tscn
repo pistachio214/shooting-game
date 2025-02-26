@@ -583,10 +583,8 @@ shape = SubResource("CapsuleShape2D_xy5sn")
 z_index = 1
 position = Vector2(13, -10)
 sprite_frames = SubResource("SpriteFrames_682i0")
-animation = &"death"
+animation = &"down_idle"
 autoplay = "down_idle"
-frame = 12
-frame_progress = 1.0
 
 [node name="WeaponNode" type="Node2D" parent="Body"]
 z_index = 1
