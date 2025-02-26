@@ -22,10 +22,14 @@ public partial class BaseEnemy : CharacterBody2D
 
 	private Player _currentPlayer = null; // 当前目标玩家
 
+	public EnemyData enemyData;
+
 	public override void _Ready()
 	{
 		_body = GetNode<Node2D>("Body");
 		_animatedSprite = GetNode<AnimatedSprite2D>("Body/AnimatedSprite");
+
+		enemyData = new EnemyData(); // 暂时直接创建，后续会修改为动态创建
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -34,8 +38,16 @@ public partial class BaseEnemy : CharacterBody2D
 		{
 			return;
 		}
-		// 怪物的世界坐标
-		Velocity = GlobalPosition.DirectionTo(Game.player.GlobalPosition) * speed;
+
+		if (PlayerManager.Instance.IsDeath())
+		{
+			Velocity = Vector2.Zero;
+		}
+		else
+		{
+			// 怪物的世界坐标
+			Velocity = GlobalPosition.DirectionTo(Game.player.GlobalPosition) * speed;
+		}
 
 		MoveAndSlide();
 
@@ -83,6 +95,7 @@ public partial class BaseEnemy : CharacterBody2D
 			if (_currentPlayer != null && _animatedSprite.Frame == 2)
 			{
 				// 造成伤害动作
+				Game.Damage(this, _currentPlayer);
 			}
 		}
 	}
@@ -92,13 +105,13 @@ public partial class BaseEnemy : CharacterBody2D
 	{
 		if (_currentState == State.ATK && _animatedSprite.Animation == "atk")
 		{
-			if (_currentPlayer != null)
+			if (_currentPlayer != null && !PlayerManager.Instance.IsDeath())
 			{
 				_animatedSprite.Play("atk");
 			}
 			else
 			{
-				_currentState = State.MOVE;
+				_currentState = State.IDLE;
 			}
 		}
 	}

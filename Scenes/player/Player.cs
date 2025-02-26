@@ -20,10 +20,18 @@ public partial class Player : CharacterBody2D
 		_playerBody = GetNode<Node2D>("Body");
 		_playerAnimatedSprite = GetNode<AnimatedSprite2D>("Body/AnimatedSprite");
 		_weaponNode = GetNode<Node2D>("Body/WeaponNode");
+
+		// 链接信号
+		ConnectSignals();
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (PlayerManager.Instance.IsDeath())
+		{
+			return;
+		}
+
 		Vector2 dir = Vector2.Zero;
 
 		dir.X = Input.GetAxis("move_left", "move_right");
@@ -34,6 +42,33 @@ public partial class Player : CharacterBody2D
 
 		ChangeAnimated();
 		MoveAndSlide();
+	}
+
+	public void ConnectSignals()
+	{
+		// 连接到PlayerManager的信号
+		PlayerManager.Instance.Connect(
+			PlayerManager.SignalName.OnPlayerDeath,
+			Callable.From(OnPlayerDeath)
+		);
+
+		PlayerManager.Instance.Connect(
+			PlayerManager.SignalName.OnPlayerHpChanged,
+			Callable.From<int, int>(OnPlayerHpChanged)
+		);
+	}
+
+	// 玩家死亡信号链接操作
+	private void OnPlayerDeath()
+	{
+		_weaponNode.Hide(); // 隐藏武器
+		_playerAnimatedSprite.Play("death"); // 播放玩家死亡动画 
+	}
+
+	// 玩家血量变化信号链接操作
+	private void OnPlayerHpChanged(int currentHp, int maxHp)
+	{
+		GD.Print($"玩家血量变化：{currentHp}/{maxHp}");
 	}
 
 	// 切换动画

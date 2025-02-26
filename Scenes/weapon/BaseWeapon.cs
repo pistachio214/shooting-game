@@ -15,7 +15,7 @@ public partial class BaseWeapon : Node2D
 	public override void _Process(double delta)
 	{
 		// 鼠标左键发射子弹
-		if (Input.IsActionJustPressed("fire"))
+		if (Input.IsActionJustPressed("fire") && !PlayerManager.Instance.IsDeath())
 		{
 			Shoot();
 		}
