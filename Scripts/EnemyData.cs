@@ -13,7 +13,7 @@ public partial class EnemyData : Resource
 	public int damage = 5; // 玩家伤害值
 
 	// 怪物当前血量
-	private int currentHp;
+	public int currentHp;
 	public int CurrentHp
 	{
 		get => currentHp;

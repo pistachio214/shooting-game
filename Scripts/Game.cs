@@ -38,13 +38,13 @@ public partial class Game : Node
 		{
 			int damage = PlayerManager.Instance.playerData.damage;
 
-			targetEnemy.enemyData.CurrentHp -= damage;
+			targetEnemy.enemyData.currentHp -= damage;
 		}
 
 		// 怪物对玩家造成伤害 
 		if (origin is BaseEnemy originEnemy && target is Player)
 		{
-			PlayerManager.Instance.playerData.CurrentHp -= originEnemy.enemyData.damage;
+			PlayerManager.Instance.playerData.currentHp -= originEnemy.enemyData.damage;
 		}
 	}
 }

@@ -9,8 +9,10 @@ public partial class Player : CharacterBody2D
 	private string currentAnimated = "down_";
 
 	private Node2D playerBodyNode;
+
 	private AnimatedSprite2D playerAnimatedSprite;
-	private Node2D weaponNode;
+
+	public Node2D weaponNode;
 
 	public override void _Ready()
 	{
@@ -52,10 +54,10 @@ public partial class Player : CharacterBody2D
 			Callable.From(OnPlayerDeath)
 		);
 
-		PlayerManager.Instance.Connect(
-			PlayerManager.SignalName.OnPlayerHpChanged,
-			Callable.From<int, int>(OnPlayerHpChanged)
-		);
+		// PlayerManager.Instance.Connect(
+		// 	PlayerManager.SignalName.OnPlayerHpChanged,
+		// 	Callable.From<int, int>(OnPlayerHpChanged)
+		// );
 	}
 
 	// 玩家死亡信号链接操作
@@ -66,10 +68,10 @@ public partial class Player : CharacterBody2D
 	}
 
 	// 玩家血量变化信号链接操作
-	private void OnPlayerHpChanged(int currentHp, int maxHp)
-	{
-		GD.Print($"玩家血量变化：{currentHp}/{maxHp}");
-	}
+	// private void OnPlayerHpChanged(int currentHp, int maxHp)
+	// {
+	// 	GD.Print($"玩家血量变化：{currentHp}/{maxHp}");
+	// }
 
 	// 切换动画
 	private void ChangeAnimated()

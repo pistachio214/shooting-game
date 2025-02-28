@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://8gv7he84tuwl"]
+[gd_scene load_steps=5 format=3 uid="uid://8gv7he84tuwl"]
 
 [ext_resource type="Script" path="res://Ui/Hud.cs" id="1_wvrbb"]
+[ext_resource type="Texture2D" uid="uid://rsfj2l2m4kxo" path="res://Texture/Guns/gun1.png" id="2_nlt8b"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3j55r"]
 bg_color = Color(0, 0, 0, 0.270588)
@@ -29,21 +30,81 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_wvrbb")
 
-[node name="HpBar" type="ProgressBar" parent="HUD"]
+[node name="HpControl" type="Control" parent="HUD"]
+anchors_preset = 0
+offset_right = 245.0
+offset_bottom = 40.0
+
+[node name="HpBar" type="ProgressBar" parent="HUD/HpControl"]
 layout_mode = 1
 offset_left = 37.0
 offset_top = 13.0
 offset_right = 226.0
 offset_bottom = 29.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.631373)
+theme_override_constants/outline_size = 1
 theme_override_font_sizes/font_size = 8
 theme_override_styles/background = SubResource("StyleBoxFlat_3j55r")
 theme_override_styles/fill = SubResource("StyleBoxFlat_iqn8r")
-value = 50.0
+value = 100.0
 
-[node name="Label" type="Label" parent="HUD"]
+[node name="Label" type="Label" parent="HUD/HpControl"]
 layout_mode = 0
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 48.0
 offset_bottom = 31.0
 text = "HP:"
+
+[node name="WeaponHUDControl" type="Control" parent="HUD"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -170.0
+offset_top = -55.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="HUD/WeaponHUDControl"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -70.0
+offset_top = -32.5
+offset_right = -20.0
+offset_bottom = 17.5
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("2_nlt8b")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="WeaponName" type="Label" parent="HUD/WeaponHUDControl"]
+layout_mode = 0
+offset_left = 101.0
+offset_top = -1.0
+offset_right = 151.0
+offset_bottom = 11.0
+theme_override_font_sizes/font_size = 8
+text = "武器名称"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="Bullet" type="Label" parent="HUD/WeaponHUDControl"]
+layout_mode = 0
+offset_left = 53.0
+offset_top = 12.0
+offset_right = 103.0
+offset_bottom = 24.0
+theme_override_font_sizes/font_size = 8
+text = "30/30"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 1
