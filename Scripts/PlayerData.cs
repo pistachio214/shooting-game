@@ -19,21 +19,21 @@ public partial class PlayerData : Resource
 	public int gold = 0; // 玩家持有金币数
 
 	// 玩家当前血量
-	private int _currentHp;
+	private int currentHp;
 	public int CurrentHp
 	{
-		get => _currentHp;
+		get => currentHp;
 		set
 		{
-			_currentHp = value;
-			if (_currentHp > 0)
+			currentHp = value;
+			if (currentHp > 0)
 			{
 				// 触发血量变化信号
-				PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnPlayerHpChanged, _currentHp, maxHp);
+				PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnPlayerHpChanged, currentHp, maxHp);
 			}
 
 			// 如果血量小于等于0，触发死亡信号
-			if (_currentHp <= 0)
+			if (currentHp <= 0)
 			{
 				PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnPlayerDeath);
 			}
@@ -42,6 +42,6 @@ public partial class PlayerData : Resource
 
 	public PlayerData()
 	{
-		_currentHp = maxHp;
+		currentHp = maxHp;
 	}
 }

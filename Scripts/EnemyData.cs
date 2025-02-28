@@ -13,19 +13,19 @@ public partial class EnemyData : Resource
 	public int damage = 5; // 玩家伤害值
 
 	// 怪物当前血量
-	private int _currentHp;
+	private int currentHp;
 	public int CurrentHp
 	{
-		get => _currentHp;
+		get => currentHp;
 		set
 		{
-			_currentHp = value;
+			currentHp = value;
 		}
 	}
 
 	public EnemyData()
 	{
-		_currentHp = maxHp;
+		currentHp = maxHp;
 	}
 
 }

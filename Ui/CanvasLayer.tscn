@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=3 uid="uid://8gv7he84tuwl"]
+
+[ext_resource type="Script" path="res://Ui/Hud.cs" id="1_wvrbb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3j55r"]
+bg_color = Color(0, 0, 0, 0.270588)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqn8r"]
+bg_color = Color(0.580392, 0.843137, 0.34902, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+anti_aliasing = false
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wvrbb")
+
+[node name="HpBar" type="ProgressBar" parent="HUD"]
+layout_mode = 1
+offset_left = 37.0
+offset_top = 13.0
+offset_right = 226.0
+offset_bottom = 29.0
+theme_override_font_sizes/font_size = 8
+theme_override_styles/background = SubResource("StyleBoxFlat_3j55r")
+theme_override_styles/fill = SubResource("StyleBoxFlat_iqn8r")
+value = 50.0
+
+[node name="Label" type="Label" parent="HUD"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 48.0
+offset_bottom = 31.0
+text = "HP:"

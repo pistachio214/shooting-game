@@ -14,27 +14,27 @@ public partial class BaseEnemy : CharacterBody2D
 	[Export]
 	private float speed = 30f; // 移动速度
 
-	private Node2D _body;
+	private Node2D bodyNode;
 	// 怪物动画
-	private AnimatedSprite2D _animatedSprite;
+	private AnimatedSprite2D animatedSprite;
 
-	private State _currentState = State.IDLE; // 当前怪物状态
+	private State currentState = State.IDLE; // 当前怪物状态
 
-	private Player _currentPlayer = null; // 当前目标玩家
+	private Player currentPlayer = null; // 当前目标玩家
 
 	public EnemyData enemyData;
 
 	public override void _Ready()
 	{
-		_body = GetNode<Node2D>("Body");
-		_animatedSprite = GetNode<AnimatedSprite2D>("Body/AnimatedSprite");
+		bodyNode = GetNode<Node2D>("Body");
+		animatedSprite = GetNode<AnimatedSprite2D>("Body/AnimatedSprite");
 
 		enemyData = new EnemyData(); // 暂时直接创建，后续会修改为动态创建
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (_currentState == State.DETAH || _currentState == State.ATK)
+		if (currentState == State.DETAH || currentState == State.ATK)
 		{
 			return;
 		}
@@ -46,7 +46,7 @@ public partial class BaseEnemy : CharacterBody2D
 		else
 		{
 			// 怪物的世界坐标
-			Velocity = GlobalPosition.DirectionTo(Game.player.GlobalPosition) * speed;
+			Velocity = GlobalPosition.DirectionTo(Game.Instance.player.GlobalPosition) * speed;
 		}
 
 		MoveAndSlide();
@@ -58,14 +58,14 @@ public partial class BaseEnemy : CharacterBody2D
 	{
 		if (Velocity == Vector2.Zero)
 		{
-			_animatedSprite.Play("idle");
-			_currentState = State.IDLE;
+			animatedSprite.Play("idle");
+			currentState = State.IDLE;
 		}
 		else
 		{
-			_animatedSprite.Play("move");
-			_currentState = State.MOVE;
-			_body.Scale = new Vector2(x: Velocity.X < 0 ? -1 : 1, y: 1);
+			animatedSprite.Play("move");
+			currentState = State.MOVE;
+			bodyNode.Scale = new Vector2(x: Velocity.X < 0 ? -1 : 1, y: 1);
 		}
 	}
 
@@ -73,29 +73,29 @@ public partial class BaseEnemy : CharacterBody2D
 	{
 		if (body is Player player)
 		{
-			_currentPlayer = player;
-			_currentState = State.ATK;
-			_animatedSprite.Play("atk");
+			currentPlayer = player;
+			currentState = State.ATK;
+			animatedSprite.Play("atk");
 		}
 	}
 
 	public void OnAtkAreaBodyExited(Node2D body)
 	{
-		if (body is Player player && player == _currentPlayer)
+		if (body is Player player && player == currentPlayer)
 		{
-			_currentPlayer = null;
+			currentPlayer = null;
 		}
 	}
 
 	public void OnAnimatedSpriteFrameChanged()
 	{
-		if (_currentState == State.ATK && _animatedSprite.Animation == "atk")
+		if (currentState == State.ATK && animatedSprite.Animation == "atk")
 		{
 			// 确定动画第二帧为攻击帧
-			if (_currentPlayer != null && _animatedSprite.Frame == 2)
+			if (currentPlayer != null && animatedSprite.Frame == 2)
 			{
 				// 造成伤害动作
-				Game.Damage(this, _currentPlayer);
+				Game.Damage(this, currentPlayer);
 			}
 		}
 	}
@@ -103,15 +103,15 @@ public partial class BaseEnemy : CharacterBody2D
 	// 动画结束后，判断是否继续攻击或者恢复到move状态
 	public void OnAnimatedSpriteAnimationFinished()
 	{
-		if (_currentState == State.ATK && _animatedSprite.Animation == "atk")
+		if (currentState == State.ATK && animatedSprite.Animation == "atk")
 		{
-			if (_currentPlayer != null && !PlayerManager.Instance.IsDeath())
+			if (currentPlayer != null && !PlayerManager.Instance.IsDeath())
 			{
-				_animatedSprite.Play("atk");
+				animatedSprite.Play("atk");
 			}
 			else
 			{
-				_currentState = State.IDLE;
+				currentState = State.IDLE;
 			}
 		}
 	}

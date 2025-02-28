@@ -3,23 +3,23 @@ using System;
 
 public partial class Player : CharacterBody2D
 {
-	private float _speed = 70f;
+	private float speed = 70f;
 
 	// 记录当前朝向
-	private string _currentAnimated = "down_";
+	private string currentAnimated = "down_";
 
-	private Node2D _playerBody;
-	private AnimatedSprite2D _playerAnimatedSprite;
-	private Node2D _weaponNode;
+	private Node2D playerBodyNode;
+	private AnimatedSprite2D playerAnimatedSprite;
+	private Node2D weaponNode;
 
 	public override void _Ready()
 	{
 		// 将玩家对象加入到游戏单例中
-		Game.player = this;
+		Game.Instance.player = this;
 
-		_playerBody = GetNode<Node2D>("Body");
-		_playerAnimatedSprite = GetNode<AnimatedSprite2D>("Body/AnimatedSprite");
-		_weaponNode = GetNode<Node2D>("Body/WeaponNode");
+		playerBodyNode = GetNode<Node2D>("Body");
+		playerAnimatedSprite = GetNode<AnimatedSprite2D>("Body/AnimatedSprite");
+		weaponNode = GetNode<Node2D>("Body/WeaponNode");
 
 		// 链接信号
 		ConnectSignals();
@@ -38,7 +38,7 @@ public partial class Player : CharacterBody2D
 		dir.Y = Input.GetAxis("move_up", "move_down");
 
 		// 归一化解决斜着跑比直线更快的问题
-		Velocity = dir.Normalized() * _speed;
+		Velocity = dir.Normalized() * speed;
 
 		ChangeAnimated();
 		MoveAndSlide();
@@ -61,8 +61,8 @@ public partial class Player : CharacterBody2D
 	// 玩家死亡信号链接操作
 	private void OnPlayerDeath()
 	{
-		_weaponNode.Hide(); // 隐藏武器
-		_playerAnimatedSprite.Play("death"); // 播放玩家死亡动画 
+		weaponNode.Hide(); // 隐藏武器
+		playerAnimatedSprite.Play("death"); // 播放玩家死亡动画 
 	}
 
 	// 玩家血量变化信号链接操作
@@ -76,35 +76,35 @@ public partial class Player : CharacterBody2D
 	{
 		if (Velocity == Vector2.Zero)
 		{
-			_playerAnimatedSprite.Play(_currentAnimated + "idle");
+			playerAnimatedSprite.Play(currentAnimated + "idle");
 		}
 		else
 		{
-			_currentAnimated = GetMovementDir();
-			_playerAnimatedSprite.Play(_currentAnimated + "move");
+			currentAnimated = GetMovementDir();
+			playerAnimatedSprite.Play(currentAnimated + "move");
 
 			// 反转镜像
-			// _playerBody.Scale = new Vector2(x: Velocity.X < 0 ? -1 : 1, y: 1);
+			// playerBodyNode.Scale = new Vector2(x: Velocity.X < 0 ? -1 : 1, y: 1);
 		}
 
 		Vector2 _position = GetGlobalMousePosition();
-		_weaponNode.LookAt(_position);
+		weaponNode.LookAt(_position);
 
-		if (_position.X > Position.X && _playerBody.Scale.X != 1)
+		if (_position.X > Position.X && playerBodyNode.Scale.X != 1)
 		{
-			_playerBody.Scale = new Vector2(x: 1, y: 1);
+			playerBodyNode.Scale = new Vector2(x: 1, y: 1);
 		}
 
-		if (_position.X < Position.X && _playerBody.Scale.X != -1)
+		if (_position.X < Position.X && playerBodyNode.Scale.X != -1)
 		{
-			_playerBody.Scale = new Vector2(x: -1, y: 1);
+			playerBodyNode.Scale = new Vector2(x: -1, y: 1);
 		}
 	}
 
 	//  获取移动时的方向
 	private string GetMovementDir()
 	{
-		_weaponNode.ZIndex = 1;
+		weaponNode.ZIndex = 1;
 
 		if (Velocity == Vector2.Zero)
 		{
@@ -121,7 +121,7 @@ public partial class Player : CharacterBody2D
 		}
 		else if (-135 <= degree && degree < -45)
 		{
-			_weaponNode.ZIndex = 0;
+			weaponNode.ZIndex = 0;
 			return "up_";
 		}
 		else

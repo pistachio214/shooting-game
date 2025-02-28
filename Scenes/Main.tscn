@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://bso2svt0qvblh"]
+[gd_scene load_steps=7 format=4 uid="uid://bso2svt0qvblh"]
 
 [ext_resource type="Texture2D" uid="uid://bqjojp65a7av1" path="res://Texture/Tileset.png" id="1_tvjpg"]
 [ext_resource type="PackedScene" uid="uid://dp0bev3xgutux" path="res://Scenes/Player.tscn" id="2_irhhp"]
 [ext_resource type="PackedScene" uid="uid://be7bqfhhxetq3" path="res://Scenes/enemy/Ghoul.tscn" id="3_8dsmw"]
+[ext_resource type="PackedScene" uid="uid://8gv7he84tuwl" path="res://Ui/CanvasLayer.tscn" id="4_fdqne"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2jt2o"]
 texture = ExtResource("1_tvjpg")
@@ -189,3 +190,5 @@ tile_set = SubResource("TileSet_4qstf")
 position = Vector2(280, 144)
 
 [node name="BaseEnemy" parent="." instance=ExtResource("3_8dsmw")]
+
+[node name="CanvasLayer" parent="." instance=ExtResource("4_fdqne")]
