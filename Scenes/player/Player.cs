@@ -89,15 +89,15 @@ public partial class Player : CharacterBody2D
 			// playerBodyNode.Scale = new Vector2(x: Velocity.X < 0 ? -1 : 1, y: 1);
 		}
 
-		Vector2 _position = GetGlobalMousePosition();
-		weaponNode.LookAt(_position);
+		Vector2 position = GetGlobalMousePosition();
+		weaponNode.LookAt(position);
 
-		if (_position.X > Position.X && playerBodyNode.Scale.X != 1)
+		if (position.X > Position.X && playerBodyNode.Scale.X != 1)
 		{
 			playerBodyNode.Scale = new Vector2(x: 1, y: 1);
 		}
 
-		if (_position.X < Position.X && playerBodyNode.Scale.X != -1)
+		if (position.X < Position.X && playerBodyNode.Scale.X != -1)
 		{
 			playerBodyNode.Scale = new Vector2(x: -1, y: 1);
 		}
