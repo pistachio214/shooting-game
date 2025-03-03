@@ -27,7 +27,7 @@ public partial class BaseEnemy : CharacterBody2D
 	public override void _Ready()
 	{
 		bodyNode = GetNode<Node2D>("Body");
-		animatedSprite = GetNode<AnimatedSprite2D>("Body/AnimatedSprite");
+		animatedSprite = bodyNode.GetNode<AnimatedSprite2D>("AnimatedSprite");
 
 		enemyData = new EnemyData(); // 暂时直接创建，后续会修改为动态创建
 	}

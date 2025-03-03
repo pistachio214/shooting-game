@@ -19,7 +19,7 @@ public partial class PlayerData : Resource
 	public int gold = 0; // 玩家持有金币数
 
 	// 玩家当前血量
-	public int currentHp;
+	private int currentHp;
 	public int CurrentHp
 	{
 		get => currentHp;
@@ -38,6 +38,9 @@ public partial class PlayerData : Resource
 		}
 	}
 
+	/**
+	 * 初始化当前血量
+	 */
 	public PlayerData()
 	{
 		currentHp = maxHp;

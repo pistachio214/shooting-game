@@ -44,7 +44,7 @@ public partial class Game : Node
 		// 怪物对玩家造成伤害 
 		if (origin is BaseEnemy originEnemy && target is Player)
 		{
-			PlayerManager.Instance.playerData.currentHp -= originEnemy.enemyData.damage;
+			PlayerManager.Instance.playerData.CurrentHp -= originEnemy.enemyData.damage;
 		}
 	}
 }

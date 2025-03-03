@@ -20,8 +20,8 @@ public partial class Player : CharacterBody2D
 		Game.Instance.player = this;
 
 		playerBodyNode = GetNode<Node2D>("Body");
-		playerAnimatedSprite = GetNode<AnimatedSprite2D>("Body/AnimatedSprite");
-		weaponNode = GetNode<Node2D>("Body/WeaponNode");
+		playerAnimatedSprite = playerBodyNode.GetNode<AnimatedSprite2D>("AnimatedSprite");
+		weaponNode = playerBodyNode.GetNode<Node2D>("WeaponNode");
 
 		// 链接信号
 		ConnectSignals();

@@ -83,7 +83,7 @@ public partial class PlayerManager : Node
 	{
 		if (playerData != null)
 		{
-			return playerData.currentHp <= 0;
+			return playerData.CurrentHp <= 0;
 		}
 
 		return false;
