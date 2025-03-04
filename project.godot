@@ -11,14 +11,18 @@ config_version=5
 [application]
 
 config/name="Shooting Game"
-run/main_scene="res://Scenes/Main.tscn"
-config/features=PackedStringArray("4.3", "C#", "Forward Plus")
+config/description="学习2D游戏开发，编写的学习版本项目"
+config/version="0.0.1"
+run/main_scene="uid://dki4g8jxc56ye"
+config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Game="*res://Scripts/Game.cs"
 PlayerManager="*res://Scripts/PlayerManager.cs"
+LevelManager="*res://Scripts/LevelManager.cs"
+EnemyManager="*res://Scripts/EnemyManager.cs"
 
 [display]
 

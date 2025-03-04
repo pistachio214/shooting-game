@@ -1,0 +1,99 @@
+[gd_scene load_steps=5 format=3 uid="uid://dki4g8jxc56ye"]
+
+[ext_resource type="Script" uid="uid://bpmf87onxh4v0" path="res://Ui/MainUi.cs" id="1_7y656"]
+[ext_resource type="PackedScene" uid="uid://bso2svt0qvblh" path="res://Scenes/Main.tscn" id="2_vve6n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7y656"]
+bg_color = Color(0.207843, 0.207843, 0.207843, 0.690196)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vve6n"]
+bg_color = Color(0.0941176, 0.0941176, 0.0941176, 0.0196078)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_size = 2
+shadow_offset = Vector2(0, 2)
+anti_aliasing = false
+
+[node name="MainUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7y656")
+
+[node name="Main" parent="." instance=ExtResource("2_vve6n")]
+
+[node name="GameEntryControl" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameLabel" type="Label" parent="GameEntryControl"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -201.0
+offset_top = 30.0
+offset_right = 199.0
+offset_bottom = 64.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+text = "2D游戏名称"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameEntryControl"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -185.0
+offset_right = 110.0
+offset_bottom = -15.0
+grow_vertical = 0
+
+[node name="Start" type="Button" parent="GameEntryControl/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/focus = SubResource("StyleBoxFlat_7y656")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vve6n")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7y656")
+text = "开始游戏"
+
+[node name="Exit" type="Button" parent="GameEntryControl/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_font_sizes/font_size = 12
+theme_override_styles/focus = SubResource("StyleBoxFlat_7y656")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vve6n")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7y656")
+text = "退出游戏"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.121569, 0.121569, 0.121569, 1)
+
+[connection signal="pressed" from="GameEntryControl/VBoxContainer/Start" to="." method="OnStartPressed"]
+[connection signal="pressed" from="GameEntryControl/VBoxContainer/Exit" to="." method="OnExitPressed"]

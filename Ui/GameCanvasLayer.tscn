@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://8gv7he84tuwl"]
+[gd_scene load_steps=7 format=3 uid="uid://8gv7he84tuwl"]
 
-[ext_resource type="Script" path="res://Ui/Hud.cs" id="1_wvrbb"]
-[ext_resource type="Texture2D" uid="uid://rsfj2l2m4kxo" path="res://Texture/Guns/gun1.png" id="2_nlt8b"]
+[ext_resource type="Script" uid="uid://dfgvn0lelyx3u" path="res://Ui/GameCanvasLayer.cs" id="1_2xa2f"]
+[ext_resource type="Script" uid="uid://w1fbybyymsos" path="res://Ui/Hud.cs" id="1_gipns"]
+[ext_resource type="Texture2D" uid="uid://rsfj2l2m4kxo" path="res://Texture/Guns/gun1.png" id="2_2xa2f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3j55r"]
 bg_color = Color(0, 0, 0, 0.270588)
@@ -19,7 +20,16 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 anti_aliasing = false
 
-[node name="CanvasLayer" type="CanvasLayer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2xa2f"]
+bg_color = Color(0.141176, 0.141176, 0.141176, 0.282353)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
+[node name="GameCanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_2xa2f")
 
 [node name="HUD" type="Control" parent="."]
 layout_mode = 3
@@ -28,7 +38,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_wvrbb")
+script = ExtResource("1_gipns")
 
 [node name="HpControl" type="Control" parent="HUD"]
 anchors_preset = 0
@@ -39,7 +49,7 @@ offset_bottom = 40.0
 layout_mode = 1
 offset_left = 37.0
 offset_top = 13.0
-offset_right = 226.0
+offset_right = 197.0
 offset_bottom = 29.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.631373)
 theme_override_constants/outline_size = 1
@@ -81,7 +91,7 @@ offset_right = -20.0
 offset_bottom = 17.5
 grow_horizontal = 0
 grow_vertical = 2
-texture = ExtResource("2_nlt8b")
+texture = ExtResource("2_2xa2f")
 expand_mode = 1
 stretch_mode = 6
 
@@ -108,3 +118,18 @@ text = "30/30"
 horizontal_alignment = 2
 vertical_alignment = 1
 autowrap_mode = 1
+
+[node name="LevelLabel" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -35.0
+offset_top = 8.0
+offset_right = 35.0
+offset_bottom = 38.0
+grow_horizontal = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_2xa2f")
+text = "关卡: 1"
+horizontal_alignment = 1
+vertical_alignment = 1

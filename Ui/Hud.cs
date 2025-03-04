@@ -12,37 +12,30 @@ public partial class Hud : Control
 
 	private TextureRect weaponTextureRect;
 
+	private Label levelLabel;
+
 	public override void _Ready()
 	{
 		progressBar = GetNode<ProgressBar>("HpControl/HpBar");
 		bulletLabel = GetNode<Label>("WeaponHUDControl/Bullet");
 		weaponNameLabel = GetNode<Label>("WeaponHUDControl/WeaponName");
 		weaponTextureRect = GetNode<TextureRect>("WeaponHUDControl/TextureRect");
+		levelLabel = GetNode<Label>("LevelLabel");
 
 		// 链接PlayerManager -> OnPlayerHpChanged信号
-		PlayerManager.Instance.Connect(
-			PlayerManager.SignalName.OnPlayerHpChanged,
-			Callable.From<int, int>(OnPlayerHpChanged)
-		);
+		PlayerManager.Instance.Connect(PlayerManager.SignalName.OnPlayerHpChanged, Callable.From<int, int>(OnPlayerHpChanged));
 
 		// 链接PlayerManager -> OnBulletCountChanged信号
-		PlayerManager.Instance.Connect(
-			PlayerManager.SignalName.OnBulletCountChanged,
-			Callable.From<int, int>(OnBulletCountChanged)
-		);
+		PlayerManager.Instance.Connect(PlayerManager.SignalName.OnBulletCountChanged, Callable.From<int, int>(OnBulletCountChanged));
 
 		// 链接PlayerManager -> OnBulletCountChanged信号
-		PlayerManager.Instance.Connect(
-			PlayerManager.SignalName.OnWeaponReload,
-			Callable.From(OnWeaponReload)
-		);
+		PlayerManager.Instance.Connect(PlayerManager.SignalName.OnWeaponReload, Callable.From(OnWeaponReload));
 
 		// 链接PlayerManager -> OnWeaponChanged
-		PlayerManager.Instance.Connect(
-			PlayerManager.SignalName.OnWeaponChanged,
-			Callable.From<BaseWeapon>(OnWeaponChanged)
-		);
+		PlayerManager.Instance.Connect(PlayerManager.SignalName.OnWeaponChanged, Callable.From<BaseWeapon>(OnWeaponChanged));
 
+		// 链接LevelManager -> OnLevelChange
+		LevelManager.Instance.Connect(LevelManager.SignalName.OnLevelChange, Callable.From(OnLevelChange));
 
 	}
 
@@ -71,5 +64,10 @@ public partial class Hud : Control
 	{
 		weaponNameLabel.Text = weapon.weaponName;
 		weaponTextureRect.Texture = weapon.sprite.Texture;
+	}
+
+	private void OnLevelChange()
+	{
+		levelLabel.Text = $"关卡 {LevelManager.Instance.currentLevel}";
 	}
 }

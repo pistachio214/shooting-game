@@ -49,15 +49,9 @@ public partial class Player : CharacterBody2D
 	public void ConnectSignals()
 	{
 		// 连接到PlayerManager的信号
-		PlayerManager.Instance.Connect(
-			PlayerManager.SignalName.OnPlayerDeath,
-			Callable.From(OnPlayerDeath)
-		);
+		PlayerManager.Instance.Connect(PlayerManager.SignalName.OnPlayerDeath, Callable.From(OnPlayerDeath));
 
-		// PlayerManager.Instance.Connect(
-		// 	PlayerManager.SignalName.OnPlayerHpChanged,
-		// 	Callable.From<int, int>(OnPlayerHpChanged)
-		// );
+		// PlayerManager.Instance.Connect(PlayerManager.SignalName.OnPlayerHpChanged, Callable.From<int, int>(OnPlayerHpChanged));
 	}
 
 	// 玩家死亡信号链接操作

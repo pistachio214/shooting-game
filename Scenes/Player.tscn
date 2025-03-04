@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://d0kbahlxf482d" path="res://Texture/Without Sword (for gun)/Up/04 Stranded - Pack 4 back up-Idle Up.png" id="1_76eol"]
 [ext_resource type="Texture2D" uid="uid://0pn7n051p4wd" path="res://Texture/Without Sword (for gun)/Down/04 Stranded - Pack 4 back up-Idle Down.png" id="1_bm16e"]
-[ext_resource type="Script" path="res://Scenes/player/Player.cs" id="1_te8b3"]
+[ext_resource type="Script" uid="uid://3aw1hirnvfmh" path="res://Scenes/player/Player.cs" id="1_te8b3"]
 [ext_resource type="Texture2D" uid="uid://bntafojuggskn" path="res://Texture/Without Sword (for gun)/Up/04 Stranded - Pack 4 back up-Move Up.png" id="2_1mle6"]
 [ext_resource type="Texture2D" uid="uid://cafxerxwqdnr3" path="res://Texture/Without Sword (for gun)/Down/04 Stranded - Pack 4 back up-Move Down.png" id="2_hconq"]
 [ext_resource type="Texture2D" uid="uid://qchqq41s6auu" path="res://Texture/Without Sword (for gun)/left right/R.png" id="3_g0h7c"]

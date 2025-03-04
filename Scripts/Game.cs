@@ -5,6 +5,9 @@ public partial class Game : Node
 {
 	public static Game Instance { get; private set; }
 
+	[Signal]
+	public delegate void OnGameStartEventHandler(); // 游戏开始信号
+
 	public Player player;
 
 	// Called when the node enters the scene tree for the first time.

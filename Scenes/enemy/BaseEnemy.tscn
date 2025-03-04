@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dv8j3i7nf7kq5"]
 
 [ext_resource type="Texture2D" uid="uid://bruslgw43o0fw" path="res://Texture/Without Sword (for gun)/shadow.png" id="1_m88s0"]
-[ext_resource type="Script" path="res://Scenes/enemy/BaseEnemy.cs" id="1_yhvo1"]
+[ext_resource type="Script" uid="uid://cxctceg7y1c5" path="res://Scenes/enemy/BaseEnemy.cs" id="1_yhvo1"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c0lp0"]
 radius = 5.0
