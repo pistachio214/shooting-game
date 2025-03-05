@@ -5,6 +5,8 @@ public partial class Game : Node
 {
 	public static Game Instance { get; private set; }
 
+	private static readonly PackedScene preHitLabelPackedScene = GD.Load<PackedScene>("uid://b66ohsw4tcoux");
+
 	[Signal]
 	public delegate void OnGameStartEventHandler(); // 游戏开始信号
 
@@ -51,5 +53,15 @@ public partial class Game : Node
 		{
 			PlayerManager.Instance.playerData.CurrentHp -= originEnemy.enemyData.damage;
 		}
+	}
+
+	// 展示飘字
+	public void ShowLabel(Node2D origin, string text)
+	{
+		HitLabel instance = preHitLabelPackedScene.Instantiate<HitLabel>();
+		instance.GlobalPosition = origin.GlobalPosition;
+
+		map.AddChild(instance);
+		instance.SetText(text);
 	}
 }

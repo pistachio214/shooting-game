@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://b66ohsw4tcoux"]
+
+[ext_resource type="Script" uid="uid://chj0ko1gw1yyy" path="res://Ui/HitLabel.cs" id="1_7wl7e"]
+
+[node name="HitLabel" type="Node2D"]
+script = ExtResource("1_7wl7e")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -35.0
+offset_top = -25.0
+offset_right = 33.0
+offset_bottom = -2.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.556863)
+theme_override_font_sizes/font_size = 8
+text = "-9"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -21,9 +21,11 @@ public partial class BaseWeapon : Node2D
 
 	private int currentBulletCount = 0; // 当前子弹数量
 
+	private GpuParticles2D fireParticles;
+
 	private float currentRofTick = 0;
 
-	public Sprite2D sprite; 
+	public Sprite2D sprite;
 
 	private Node2D bulletPointNode;
 
@@ -33,6 +35,9 @@ public partial class BaseWeapon : Node2D
 	{
 		sprite = GetNode<Sprite2D>("Sprite2D");
 		bulletPointNode = GetNode<Node2D>("BulletPoint");
+		fireParticles = GetNode<GpuParticles2D>("GPUParticles2D");
+
+		fireParticles.Lifetime = weaponRof - 0.01; // 设置粒子存活时间略小于射击间隔
 
 		// 初始化当前子弹数
 		currentBulletCount = bulletMax;
@@ -91,6 +96,8 @@ public partial class BaseWeapon : Node2D
 		currentBulletCount -= 1;
 		// 发送信号到PlayerManager的OnBulletCountChanged,告诉它子弹数量减少了
 		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnBulletCountChanged, currentBulletCount, bulletMax);
+
+		fireParticles.Restart();
 
 		// 子弹清空,则自动切换弹匣
 		if (currentBulletCount <= 0)

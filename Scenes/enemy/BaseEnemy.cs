@@ -25,14 +25,21 @@ public partial class BaseEnemy : CharacterBody2D
 
 	public EnemyData enemyData;
 
+	private CollisionShape2D enemyCollisionShape;
+
+	private Sprite2D enemyShadowSprite;
+
 	public override void _Ready()
 	{
 		bodyNode = GetNode<Node2D>("Body");
 		animatedSprite = bodyNode.GetNode<AnimatedSprite2D>("AnimatedSprite");
+		enemyCollisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
+		enemyShadowSprite = GetNode<Sprite2D>("Shadow");
 
 		EnemyManager.Instance.enemyList.Add(this);
 		enemyData = new EnemyData(); // 暂时直接创建，后续会修改为动态创建
 
+		enemyData.Connect(EnemyData.SignalName.OnHit, Callable.From<int>(OnHit));
 		enemyData.Connect(EnemyData.SignalName.OnDeath, Callable.From(OnDeath));
 	}
 
@@ -58,10 +65,21 @@ public partial class BaseEnemy : CharacterBody2D
 		ChangeAnimated();
 	}
 
+	private void OnHit(int damage)
+	{
+		Game.Instance.ShowLabel(this, $"-{damage}");
+	}
+
 	private void OnDeath()
 	{
+		if (currentState == State.DETAH)
+		{
+			return;
+		}
 		currentState = State.DETAH;
+		enemyCollisionShape.CallDeferred("set_disabled", true);
 		animatedSprite.Play("death");
+		enemyShadowSprite.Hide();
 	}
 
 	// 离开场景树时自动触发
@@ -125,7 +143,7 @@ public partial class BaseEnemy : CharacterBody2D
 		{
 			QueueFree();
 		}
-		
+
 		if (currentState == State.ATK && animatedSprite.Animation == "atk")
 		{
 			if (currentPlayer != null && !PlayerManager.Instance.IsDeath())

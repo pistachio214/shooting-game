@@ -1,7 +1,40 @@
-[gd_scene load_steps=3 format=3 uid="uid://c8f13wyyqqsvx"]
+[gd_scene load_steps=10 format=3 uid="uid://c8f13wyyqqsvx"]
 
 [ext_resource type="Texture2D" uid="uid://rsfj2l2m4kxo" path="res://Texture/Guns/gun1.png" id="1_0bqbo"]
 [ext_resource type="Script" uid="uid://ck6h6gkexqrxs" path="res://Scenes/weapon/BaseWeapon.cs" id="1_ac1dy"]
+
+[sub_resource type="Curve" id="Curve_ch06v"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.737418, 0.994628), 0.0, 0.0, 0, 0, Vector2(0.980306, 0.027686), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_raamt"]
+curve = SubResource("Curve_ch06v")
+
+[sub_resource type="Gradient" id="Gradient_es62l"]
+offsets = PackedFloat32Array(0.408353, 0.640371, 1)
+colors = PackedColorArray(0.755156, 0.561185, 0.138627, 1, 0.94527, 0.901912, 0.807458, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pb3kv"]
+gradient = SubResource("Gradient_es62l")
+
+[sub_resource type="Curve" id="Curve_8wtin"]
+_data = [Vector2(0.00656455, 0.145868), 0.0, 0.0, 0, 0, Vector2(0.253829, 1), 0.0, 0.0, 0, 0, Vector2(0.989059, 0.511157), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_scnfr"]
+curve = SubResource("Curve_8wtin")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2b650"]
+particle_flag_disable_z = true
+spread = 51.0
+initial_velocity_min = 30.0
+initial_velocity_max = 80.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_scnfr")
+color_ramp = SubResource("GradientTexture1D_pb3kv")
+alpha_curve = SubResource("CurveTexture_raamt")
 
 [node name="BaseWeapon" type="Node2D"]
 script = ExtResource("1_ac1dy")
@@ -11,3 +44,13 @@ texture = ExtResource("1_0bqbo")
 
 [node name="BulletPoint" type="Node2D" parent="."]
 position = Vector2(5, -1)
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(6, -1)
+emitting = false
+amount = 16
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_2b650")

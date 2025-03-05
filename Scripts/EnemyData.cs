@@ -19,6 +19,12 @@ public partial class EnemyData : Resource
 		get => currentHp;
 		set
 		{
+			int num = currentHp - value;
+			if (currentHp != 0 || num != 0)
+			{
+				EmitSignal(SignalName.OnHit, num);
+			}
+
 			currentHp = value;
 			if (currentHp <= 0)
 			{
@@ -29,6 +35,9 @@ public partial class EnemyData : Resource
 
 	[Signal]
 	public delegate void OnDeathEventHandler(); // 怪物死亡通知
+
+	[Signal]
+	public delegate void OnHitEventHandler(int damage); // 怪物受到伤害通知
 
 	public EnemyData()
 	{
