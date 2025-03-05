@@ -8,6 +8,8 @@ public partial class Game : Node
 	[Signal]
 	public delegate void OnGameStartEventHandler(); // 游戏开始信号
 
+	public Node2D map; // 游戏场景节点
+
 	public Player player;
 
 	// Called when the node enters the scene tree for the first time.
@@ -41,7 +43,7 @@ public partial class Game : Node
 		{
 			int damage = PlayerManager.Instance.playerData.damage;
 
-			targetEnemy.enemyData.currentHp -= damage;
+			targetEnemy.enemyData.CurrentHp -= damage;
 		}
 
 		// 怪物对玩家造成伤害 

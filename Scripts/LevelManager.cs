@@ -14,7 +14,7 @@ public partial class LevelManager : Node
 	private List<LevelData> levelList = new List<LevelData>();
 
 	[Signal]
-	public delegate void OnLevelChangeEventHandler(); // 关卡改变信号,用于通知关卡改变,刷新UI等功能
+	public delegate void OnLevelChangeEventHandler(LevelData data); // 关卡改变信号,用于通知关卡改变,刷新UI等功能
 
 	public override void _Ready()
 	{
@@ -28,16 +28,12 @@ public partial class LevelManager : Node
 			QueueFree(); // 防止重复创建
 		}
 
-		GD.Print("到底是不是到这里了");
-
 		string[] files = DirAccess.GetFilesAt(LEVEL_PATH);
 
 		for (int i = 0; i < files.Count(); i++)
 		{
 			levelList.Add(GD.Load<LevelData>(LEVEL_PATH + files[i]));
 		}
-
-		GD.Print("[] -->> ", levelList);
 	}
 
 	// 下一关方法
@@ -45,6 +41,13 @@ public partial class LevelManager : Node
 	{
 		currentLevel += 1;
 
-		EmitSignal(SignalName.OnLevelChange);
+		EmitSignal(SignalName.OnLevelChange, levelList[currentLevel - 1]);
+	}
+
+	// 回合结束
+	public void Stop()
+	{
+		// 停止刷怪计时器
+		EnemyManager.Instance.timer.Stop();
 	}
 }

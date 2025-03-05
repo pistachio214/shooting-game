@@ -13,15 +13,22 @@ public partial class EnemyData : Resource
 	public int damage = 5; // 玩家伤害值
 
 	// 怪物当前血量
-	public int currentHp;
+	private int currentHp;
 	public int CurrentHp
 	{
 		get => currentHp;
 		set
 		{
 			currentHp = value;
+			if (currentHp <= 0)
+			{
+				EmitSignal(SignalName.OnDeath);
+			}
 		}
 	}
+
+	[Signal]
+	public delegate void OnDeathEventHandler(); // 怪物死亡通知
 
 	public EnemyData()
 	{

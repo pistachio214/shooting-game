@@ -27,6 +27,8 @@ public partial class BaseWeapon : Node2D
 
 	private Node2D bulletPointNode;
 
+	public Player player; // 属于某个玩家
+
 	public override void _Ready()
 	{
 		sprite = GetNode<Sprite2D>("Sprite2D");
@@ -81,6 +83,8 @@ public partial class BaseWeapon : Node2D
 		instantiate.GlobalPosition = bulletPointNode.GlobalPosition;
 		// 方向跟随鼠标
 		instantiate.dir = GlobalPosition.DirectionTo(GetGlobalMousePosition());
+		// 当前枪械的对象
+		instantiate.currentWeapon = this;
 
 		GetTree().Root.AddChild(instantiate);
 

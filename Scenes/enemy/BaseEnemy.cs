@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 enum State
 {
@@ -15,8 +16,8 @@ public partial class BaseEnemy : CharacterBody2D
 	private float speed = 30f; // 移动速度
 
 	private Node2D bodyNode;
-	// 怪物动画
-	private AnimatedSprite2D animatedSprite;
+
+	private AnimatedSprite2D animatedSprite; // 怪物动画
 
 	private State currentState = State.IDLE; // 当前怪物状态
 
@@ -29,7 +30,10 @@ public partial class BaseEnemy : CharacterBody2D
 		bodyNode = GetNode<Node2D>("Body");
 		animatedSprite = bodyNode.GetNode<AnimatedSprite2D>("AnimatedSprite");
 
+		EnemyManager.Instance.enemyList.Add(this);
 		enemyData = new EnemyData(); // 暂时直接创建，后续会修改为动态创建
+
+		enemyData.Connect(EnemyData.SignalName.OnDeath, Callable.From(OnDeath));
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -54,6 +58,20 @@ public partial class BaseEnemy : CharacterBody2D
 		ChangeAnimated();
 	}
 
+	private void OnDeath()
+	{
+		currentState = State.DETAH;
+		animatedSprite.Play("death");
+	}
+
+	// 离开场景树时自动触发
+	public override void _ExitTree()
+	{
+		EnemyManager.Instance.enemyList.Remove(this); // 怪物死亡，移除List中指定元素
+		EnemyManager.Instance.EmitSignal(EnemyManager.SignalName.OnEnemyDeath);
+		EnemyManager.Instance.CheckEnemyList(); // 怪物死亡的时调用检测
+	}
+
 	private void ChangeAnimated()
 	{
 		if (Velocity == Vector2.Zero)
@@ -71,7 +89,7 @@ public partial class BaseEnemy : CharacterBody2D
 
 	public void OnAtkAreaBodyEntered(Node2D body)
 	{
-		if (body is Player player)
+		if (body is Player player && currentState != State.DETAH)
 		{
 			currentPlayer = player;
 			currentState = State.ATK;
@@ -103,6 +121,11 @@ public partial class BaseEnemy : CharacterBody2D
 	// 动画结束后，判断是否继续攻击或者恢复到move状态
 	public void OnAnimatedSpriteAnimationFinished()
 	{
+		if (currentState == State.DETAH && animatedSprite.Animation == "death")
+		{
+			QueueFree();
+		}
+		
 		if (currentState == State.ATK && animatedSprite.Animation == "atk")
 		{
 			if (currentPlayer != null && !PlayerManager.Instance.IsDeath())

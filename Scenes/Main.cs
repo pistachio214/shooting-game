@@ -8,9 +8,13 @@ public partial class Main : Node2D
 
     private GameCanvasLayer gameCanvasLayer;
 
+    public Area2D enemyArea; // 怪物刷新范围
+
     public override void _Ready()
     {
+        Game.Instance.map = this;
         gameCanvasLayer = GetNode<GameCanvasLayer>("GameCanvasLayer");
+        enemyArea = GetNode<Area2D>("EnemyArea");
 
         Game.Instance.Connect(Game.SignalName.OnGameStart, Callable.From(OnGameStart));
     }

@@ -35,7 +35,7 @@ public partial class Hud : Control
 		PlayerManager.Instance.Connect(PlayerManager.SignalName.OnWeaponChanged, Callable.From<BaseWeapon>(OnWeaponChanged));
 
 		// 链接LevelManager -> OnLevelChange
-		LevelManager.Instance.Connect(LevelManager.SignalName.OnLevelChange, Callable.From(OnLevelChange));
+		LevelManager.Instance.Connect(LevelManager.SignalName.OnLevelChange, Callable.From<LevelData>(OnLevelChange));
 
 	}
 
@@ -66,7 +66,7 @@ public partial class Hud : Control
 		weaponTextureRect.Texture = weapon.sprite.Texture;
 	}
 
-	private void OnLevelChange()
+	private void OnLevelChange(LevelData _data)
 	{
 		levelLabel.Text = $"关卡 {LevelManager.Instance.currentLevel}";
 	}

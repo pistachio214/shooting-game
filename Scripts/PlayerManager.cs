@@ -73,6 +73,7 @@ public partial class PlayerManager : Node
 			currentWeapon.QueueFree();
 		}
 
+		weapon.player = Game.Instance.player;
 		Game.Instance.player.weaponNode.AddChild(weapon);
 	}
 
