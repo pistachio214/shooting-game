@@ -69,8 +69,12 @@ public partial class BaseWeapon : Node2D
 		// 发送信号到PlayerManager的OnWeaponReload信号,告诉它切换弹匣了
 		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnWeaponReload);
 
-		GetTree().CreateTimer(2f).Timeout += OnWeaponReload;  // 模拟切换弹匣需要2秒
+		// 模拟切换弹匣需要2秒 Plan 1:
+		// GetTree().CreateTimer(2f).Timeout += OnWeaponReload;
 
+		// 模拟切换弹匣需要2秒 Plan 2:
+		SceneTreeTimer treeTimer = GetTree().CreateTimer(2f);
+		treeTimer.Connect(SceneTreeTimer.SignalName.Timeout, Callable.From(OnWeaponReload));
 	}
 
 	private void OnWeaponReload()

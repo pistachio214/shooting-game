@@ -71,6 +71,10 @@ fire={
 2d_physics/layer_3="敌人"
 2d_physics/layer_4="子弹"
 
+[physics]
+
+common/physics_interpolation=true
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

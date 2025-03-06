@@ -29,7 +29,9 @@ public partial class EnemyManager : Node
 
 		// 链接刷怪计时器信号
 		timer.OneShot = false; // 关闭单次触发
-		timer.Timeout += timeOut;
+
+		// timer.Timeout += timeOut;
+		timer.Connect(Timer.SignalName.Timeout, Callable.From(OnTimerTimeout));
 
 		// 将计时器,添加到场景树
 		AddChild(timer);
@@ -48,7 +50,7 @@ public partial class EnemyManager : Node
 		timer.Start(data.tick);
 	}
 
-	private void timeOut()
+	private void OnTimerTimeout()
 	{
 		if (currentLevelData != null)
 		{
