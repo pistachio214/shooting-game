@@ -4,23 +4,23 @@ using System;
 public partial class Hud : Control
 {
 
-	private ProgressBar progressBar;
+	private ProgressBar _progressBar;
 
-	private Label bulletLabel;
+	private Label _bulletLabel;
 
-	private Label weaponNameLabel;
+	private Label _weaponNameLabel;
 
-	private TextureRect weaponTextureRect;
+	private TextureRect _weaponTextureRect;
 
-	private Label levelLabel;
+	private Label _levelLabel;
 
 	public override void _Ready()
 	{
-		progressBar = GetNode<ProgressBar>("HpControl/HpBar");
-		bulletLabel = GetNode<Label>("WeaponHUDControl/Bullet");
-		weaponNameLabel = GetNode<Label>("WeaponHUDControl/WeaponName");
-		weaponTextureRect = GetNode<TextureRect>("WeaponHUDControl/TextureRect");
-		levelLabel = GetNode<Label>("LevelLabel");
+		_progressBar = GetNode<ProgressBar>("HpControl/HpBar");
+		_bulletLabel = GetNode<Label>("WeaponHUDControl/Bullet");
+		_weaponNameLabel = GetNode<Label>("WeaponHUDControl/WeaponName");
+		_weaponTextureRect = GetNode<TextureRect>("WeaponHUDControl/TextureRect");
+		_levelLabel = GetNode<Label>("LevelLabel");
 
 		// 链接PlayerManager -> OnPlayerHpChanged信号
 		PlayerManager.Instance.Connect(PlayerManager.SignalName.OnPlayerHpChanged, Callable.From<int, int>(OnPlayerHpChanged));
@@ -46,28 +46,28 @@ public partial class Hud : Control
 
 	private void OnPlayerHpChanged(int currentHp, int maxHp)
 	{
-		progressBar.MaxValue = maxHp;
-		progressBar.Value = currentHp;
+		_progressBar.MaxValue = maxHp;
+		_progressBar.Value = currentHp;
 	}
 
 	private void OnBulletCountChanged(int current, int max)
 	{
-		bulletLabel.Text = $"{current} / {max}";
+		_bulletLabel.Text = $"{current} / {max}";
 	}
 
 	private void OnWeaponReload()
 	{
-		bulletLabel.Text = "换弹中...";
+		_bulletLabel.Text = "换弹中...";
 	}
 
 	private void OnWeaponChanged(BaseWeapon weapon)
 	{
-		weaponNameLabel.Text = weapon.weaponName;
-		weaponTextureRect.Texture = weapon.sprite.Texture;
+		_weaponNameLabel.Text = weapon.WeaponName;
+		_weaponTextureRect.Texture = weapon.sprite.Texture;
 	}
 
 	private void OnLevelChange(LevelData _data)
 	{
-		levelLabel.Text = $"关卡 {LevelManager.Instance.currentLevel}";
+		_levelLabel.Text = $"关卡 {LevelManager.Instance.currentLevel}";
 	}
 }

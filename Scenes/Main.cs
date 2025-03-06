@@ -4,18 +4,18 @@ using System;
 public partial class Main : Node2D
 {
     // Godot4.4 引入玩家场景uid
-    private static readonly PackedScene prePlayerPackedScene = GD.Load<PackedScene>("uid://dp0bev3xgutux");
+    private static readonly PackedScene _prePlayerPackedScene = GD.Load<PackedScene>("uid://dp0bev3xgutux");
 
-    private GameCanvasLayer gameCanvasLayer;
+    private GameCanvasLayer _gameCanvasLayer;
 
     public Area2D enemyArea; // 怪物刷新范围
 
     public override void _Ready()
     {
-        Game.Instance.map = this;
-        gameCanvasLayer = GetNode<GameCanvasLayer>("GameCanvasLayer");
+        _gameCanvasLayer = GetNode<GameCanvasLayer>("GameCanvasLayer");
         enemyArea = GetNode<Area2D>("EnemyArea");
 
+        Game.Instance.map = this;
         Game.Instance.Connect(Game.SignalName.OnGameStart, Callable.From(OnGameStart));
     }
 
@@ -29,7 +29,7 @@ public partial class Main : Node2D
         LevelManager.Instance.NewLevel();
 
         // 显示hub
-        gameCanvasLayer.Show();
+        _gameCanvasLayer.Show();
 
         Tween tween = CreateTween();
         tween.Parallel().TweenProperty(GetParent<MainUi>().colorRect, "modulate:a", 0.0, 0.2); // Parallel表示并行运行动画
@@ -38,7 +38,7 @@ public partial class Main : Node2D
         ));
 
         // 添加玩家
-        Player player = prePlayerPackedScene.Instantiate<Player>();
+        Player player = _prePlayerPackedScene.Instantiate<Player>();
         AddChild(player);
     }
 }

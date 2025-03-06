@@ -6,18 +6,12 @@ using System;
  */
 public partial class PlayerManager : Node
 {
-	public static PlayerManager Instance { get; private set; }
-
-	/**
-	 * 2号武器
-	 */
-	private static readonly PackedScene preTwoWeaponPackedScene = GD.Load<PackedScene>("res://Scenes/weapon/Gun2.tscn");
-
 	/**
 	 * 玩家信号
 	 */
 	[Signal]
 	public delegate void OnPlayerHpChangedEventHandler(int current, int maxHp); // 玩家血量变化信号
+
 	[Signal]
 	public delegate void OnPlayerDeathEventHandler(); // 玩家死亡信号
 
@@ -26,10 +20,19 @@ public partial class PlayerManager : Node
 	 */
 	[Signal]
 	public delegate void OnWeaponChangedEventHandler(BaseWeapon weapon); // 切换枪械信号
+
 	[Signal]
 	public delegate void OnBulletCountChangedEventHandler(int current, int max); // 子弹数量改变信号
+
 	[Signal]
 	public delegate void OnWeaponReloadEventHandler(); // 切换弹匣信号
+
+	public static PlayerManager Instance { get; private set; }
+
+	/**
+	 * 2号武器
+	 */
+	private static readonly PackedScene _preTwoWeaponPackedScene = GD.Load<PackedScene>("res://Scenes/weapon/Gun2.tscn");
 
 	public PlayerData playerData;
 
@@ -58,7 +61,7 @@ public partial class PlayerManager : Node
 	{
 		if (@event.IsActionPressed("ui_accept"))
 		{
-			ChangeWeapon(preTwoWeaponPackedScene.Instantiate<BaseWeapon>());
+			ChangeWeapon(_preTwoWeaponPackedScene.Instantiate<BaseWeapon>());
 		}
 	}
 

@@ -5,16 +5,16 @@ using System.Linq;
 
 public partial class LevelManager : Node
 {
+	[Signal]
+	public delegate void OnLevelChangeEventHandler(LevelData data); // 关卡改变信号,用于通知关卡改变,刷新UI等功能
+
 	public static LevelManager Instance { get; private set; }
 
 	const string LEVEL_PATH = "res://Resources/Levels/";
 
 	public int currentLevel = 0; // 当前关卡
 
-	private List<LevelData> levelList = new List<LevelData>();
-
-	[Signal]
-	public delegate void OnLevelChangeEventHandler(LevelData data); // 关卡改变信号,用于通知关卡改变,刷新UI等功能
+	private readonly List<LevelData> _levelList = [];
 
 	public override void _Ready()
 	{
@@ -32,7 +32,7 @@ public partial class LevelManager : Node
 
 		for (int i = 0; i < files.Count(); i++)
 		{
-			levelList.Add(GD.Load<LevelData>(LEVEL_PATH + files[i]));
+			_levelList.Add(GD.Load<LevelData>(LEVEL_PATH + files[i]));
 		}
 	}
 
@@ -41,7 +41,7 @@ public partial class LevelManager : Node
 	{
 		currentLevel += 1;
 
-		EmitSignal(SignalName.OnLevelChange, levelList[currentLevel - 1]);
+		EmitSignal(SignalName.OnLevelChange, _levelList[currentLevel - 1]);
 	}
 
 	// 回合结束

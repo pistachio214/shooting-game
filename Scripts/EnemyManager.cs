@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 public partial class EnemyManager : Node
 {
+	[Signal]
+	public delegate void OnEnemyDeathEventHandler(LevelData data); // 怪物死亡信号
+
 	public static EnemyManager Instance { get; private set; }
 
 	public List<BaseEnemy> enemyList = [];
 
-	private LevelData currentLevelData;
+	private LevelData _currentLevelData;
 
 	public Timer timer = new Timer();
-
-	[Signal]
-	public delegate void OnEnemyDeathEventHandler(LevelData data); // 怪物死亡信号
 
 	public override void _Ready()
 	{
@@ -46,15 +46,15 @@ public partial class EnemyManager : Node
 	// 刷怪代码
 	private void OnLevelChange(LevelData data)
 	{
-		currentLevelData = data;
-		timer.Start(data.tick);
+		_currentLevelData = data;
+		timer.Start(data.Tick);
 	}
 
 	private void OnTimerTimeout()
 	{
-		if (currentLevelData != null)
+		if (_currentLevelData != null)
 		{
-			currentLevelData.CreateEnemy();
+			_currentLevelData.CreateEnemy();
 		}
 	}
 

@@ -3,12 +3,12 @@ using System;
 
 public partial class Game : Node
 {
-	public static Game Instance { get; private set; }
-
-	private static readonly PackedScene preHitLabelPackedScene = GD.Load<PackedScene>("uid://b66ohsw4tcoux");
-
 	[Signal]
 	public delegate void OnGameStartEventHandler(); // 游戏开始信号
+
+	public static Game Instance { get; private set; }
+
+	private static readonly PackedScene _preHitLabelPackedScene = GD.Load<PackedScene>("res://Ui/HitLabel.tscn");
 
 	public Node2D map; // 游戏场景节点
 
@@ -43,7 +43,7 @@ public partial class Game : Node
 		// 玩家对怪物造成伤害 
 		if (origin is Player && target is BaseEnemy targetEnemy)
 		{
-			int damage = PlayerManager.Instance.playerData.damage;
+			int damage = PlayerManager.Instance.playerData.Damage;
 
 			targetEnemy.enemyData.CurrentHp -= damage;
 		}
@@ -51,14 +51,14 @@ public partial class Game : Node
 		// 怪物对玩家造成伤害 
 		if (origin is BaseEnemy originEnemy && target is Player)
 		{
-			PlayerManager.Instance.playerData.CurrentHp -= originEnemy.enemyData.damage;
+			PlayerManager.Instance.playerData.CurrentHp -= originEnemy.enemyData.Damage;
 		}
 	}
 
 	// 展示飘字
 	public void ShowLabel(Node2D origin, string text)
 	{
-		HitLabel instance = preHitLabelPackedScene.Instantiate<HitLabel>();
+		HitLabel instance = _preHitLabelPackedScene.Instantiate<HitLabel>();
 		instance.GlobalPosition = origin.GlobalPosition;
 
 		map.AddChild(instance);

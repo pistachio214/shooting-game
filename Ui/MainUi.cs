@@ -3,13 +3,13 @@ using System;
 
 public partial class MainUi : Control
 {
-    private Control gameEntryControl;
+    private Control _gameEntryControl;
 
     public ColorRect colorRect;
 
     public override void _Ready()
     {
-        gameEntryControl = GetNode<Control>("GameEntryControl");
+        _gameEntryControl = GetNode<Control>("GameEntryControl");
         colorRect = GetNode<ColorRect>("CanvasLayer/ColorRect");
     }
 
@@ -38,7 +38,7 @@ public partial class MainUi : Control
          tween.TweenCallback(
             Callable.From(() =>
                 {
-                    gameEntryControl.Hide();
+                    _gameEntryControl.Hide();
 
                     // Plan A: 直接跳转到主界面
                     // GetTree().ChangeSceneToFile("uid://bso2svt0qvblh");

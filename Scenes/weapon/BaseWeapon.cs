@@ -3,26 +3,27 @@ using System;
 
 public partial class BaseWeapon : Node2D
 {
-
-	private static readonly PackedScene preBulletPackedScene = GD.Load<PackedScene>("res://Scenes/bullet/BaseBullet.tscn");
+	[Export]
+	public string WeaponName = "默认枪械";
 
 	[Export]
-	public string weaponName = "默认枪械";
+	public int BulletMax = 30; // 最大子弹数量
 
 	[Export]
-	public int bulletMax = 30; // 最大子弹数量
+	public int Damage = 5; // 枪械伤害
 
 	[Export]
-	public int damage = 5; // 枪械伤害
+	public float WeaponRof = 0.2f; // 枪械射速
 
-	[Export]
-	public float weaponRof = 0.2f; // 枪械射速
+	private static readonly PackedScene _preBulletPackedScene = GD.Load<PackedScene>("res://Scenes/bullet/BaseBullet.tscn");
 
-	private int currentBulletCount = 0; // 当前子弹数量
+	private int _currentBulletCount = 0; // 当前子弹数量
 
-	private GpuParticles2D fireParticles;
+	private GpuParticles2D _fireParticles;
 
-	private float currentRofTick = 0;
+	private float _currentRofTick = 0;
+
+	private AudioStreamPlayer2D _firingSoundAudioStreamPlayer; // 开枪音效
 
 	public Sprite2D sprite;
 
@@ -30,36 +31,35 @@ public partial class BaseWeapon : Node2D
 
 	public Player player; // 属于某个玩家
 
-	private AudioStreamPlayer2D firingSoundAudioStreamPlayer; // 开枪音效
-
 	public override void _Ready()
 	{
+		_fireParticles = GetNode<GpuParticles2D>("GPUParticles2D");
+		_firingSoundAudioStreamPlayer = GetNode<AudioStreamPlayer2D>("FiringSoundAudioStreamPlayer");
+
 		sprite = GetNode<Sprite2D>("Sprite2D");
 		bulletPointNode = GetNode<Node2D>("BulletPoint");
-		fireParticles = GetNode<GpuParticles2D>("GPUParticles2D");
-		firingSoundAudioStreamPlayer = GetNode<AudioStreamPlayer2D>("FiringSoundAudioStreamPlayer");
 
-		fireParticles.Lifetime = weaponRof - 0.01; // 设置粒子存活时间略小于射击间隔
+		_fireParticles.Lifetime = WeaponRof - 0.01; // 设置粒子存活时间略小于射击间隔
 
 		// 初始化当前子弹数
-		currentBulletCount = bulletMax;
+		_currentBulletCount = BulletMax;
 
 		// 枪械加载完成后,发射一次切换枪械的信号,说明此时已经切换到当前武器
 		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnWeaponChanged, this);
 
 		// 切换武器的时候,同时更新子弹数量文本
-		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnBulletCountChanged, currentBulletCount, bulletMax);
+		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnBulletCountChanged, _currentBulletCount, BulletMax);
 	}
 
 	public override void _Process(double delta)
 	{
-		currentRofTick += (float)delta;
+		_currentRofTick += (float)delta;
 
 		// 鼠标左键发射子弹
-		if (Input.IsActionJustPressed("fire") && !PlayerManager.Instance.IsDeath() && currentRofTick >= weaponRof && currentBulletCount > 0)
+		if (Input.IsActionJustPressed("fire") && !PlayerManager.Instance.IsDeath() && _currentRofTick >= WeaponRof && _currentBulletCount > 0)
 		{
 			Shoot();
-			currentRofTick = 0;
+			_currentRofTick = 0;
 		}
 	}
 
@@ -79,32 +79,32 @@ public partial class BaseWeapon : Node2D
 
 	private void OnWeaponReload()
 	{
-		currentBulletCount = bulletMax;
+		_currentBulletCount = BulletMax;
 
 		// 切换弹匣完成,再次更新显示数据
-		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnBulletCountChanged, currentBulletCount, bulletMax);
+		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnBulletCountChanged, _currentBulletCount, BulletMax);
 	}
 
 	// 射击
 	private void Shoot()
 	{
 		// 实例化子弹节点
-		BaseBullet instantiate = preBulletPackedScene.Instantiate<BaseBullet>();
+		BaseBullet instantiate = _preBulletPackedScene.Instantiate<BaseBullet>();
 		// 初始化子弹位置
 		instantiate.GlobalPosition = bulletPointNode.GlobalPosition;
 		// 方向跟随鼠标
-		instantiate.dir = GlobalPosition.DirectionTo(GetGlobalMousePosition());
+		instantiate.Dir = GlobalPosition.DirectionTo(GetGlobalMousePosition());
 		// 当前枪械的对象
 		instantiate.currentWeapon = this;
 
 		GetTree().Root.AddChild(instantiate);
 
-		currentBulletCount -= 1;
+		_currentBulletCount -= 1;
 		// 发送信号到PlayerManager的OnBulletCountChanged,告诉它子弹数量减少了
-		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnBulletCountChanged, currentBulletCount, bulletMax);
+		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnBulletCountChanged, _currentBulletCount, BulletMax);
 
 		// 子弹清空,则自动切换弹匣
-		if (currentBulletCount <= 0)
+		if (_currentBulletCount <= 0)
 		{
 			Reload();
 		}
@@ -114,15 +114,15 @@ public partial class BaseWeapon : Node2D
 
 	private void WeaponAnim()
 	{
-		fireParticles.Restart();
+		_fireParticles.Restart();
 
 		Tween tween = CreateTween().SetEase(Tween.EaseType.In);
-		tween.TweenProperty(sprite, "scale:x", 0.7, weaponRof / 2);
-		tween.TweenProperty(sprite, "scale:x", 1.0, weaponRof / 2);
+		tween.TweenProperty(sprite, "scale:x", 0.7, WeaponRof / 2);
+		tween.TweenProperty(sprite, "scale:x", 1.0, WeaponRof / 2);
 
-		firingSoundAudioStreamPlayer.Play();
+		_firingSoundAudioStreamPlayer.Play();
 
 		Vector2 offset = new Vector2(-0.5f, 1);
-		Game.Instance.CameraOffset(offset, weaponRof);
+		Game.Instance.CameraOffset(offset, WeaponRof);
 	}
 }

@@ -3,14 +3,14 @@ using System;
 
 public partial class Player : CharacterBody2D
 {
-	private float speed = 70f;
+	private float _speed = 70f;
 
 	// 记录当前朝向
-	private string currentAnimated = "down_";
+	private string _currentAnimated = "down_";
 
-	private Node2D playerBodyNode;
+	private Node2D _playerBodyNode;
 
-	private AnimatedSprite2D playerAnimatedSprite;
+	private AnimatedSprite2D _playerAnimatedSprite;
 
 	public Node2D weaponNode;
 
@@ -21,9 +21,9 @@ public partial class Player : CharacterBody2D
 		// 将玩家对象加入到游戏单例中
 		Game.Instance.player = this;
 
-		playerBodyNode = GetNode<Node2D>("Body");
-		playerAnimatedSprite = playerBodyNode.GetNode<AnimatedSprite2D>("AnimatedSprite");
-		weaponNode = playerBodyNode.GetNode<Node2D>("WeaponNode");
+		_playerBodyNode = GetNode<Node2D>("Body");
+		_playerAnimatedSprite = _playerBodyNode.GetNode<AnimatedSprite2D>("AnimatedSprite");
+		weaponNode = _playerBodyNode.GetNode<Node2D>("WeaponNode");
 		camera = GetNode<Camera2D>("Camera2D");
 
 		// 链接信号
@@ -43,7 +43,7 @@ public partial class Player : CharacterBody2D
 		dir.Y = Input.GetAxis("move_up", "move_down");
 
 		// 归一化解决斜着跑比直线更快的问题
-		Velocity = dir.Normalized() * speed;
+		Velocity = dir.Normalized() * _speed;
 
 		ChangeAnimated();
 		MoveAndSlide();
@@ -61,7 +61,7 @@ public partial class Player : CharacterBody2D
 	private void OnPlayerDeath()
 	{
 		weaponNode.Hide(); // 隐藏武器
-		playerAnimatedSprite.Play("death"); // 播放玩家死亡动画 
+		_playerAnimatedSprite.Play("death"); // 播放玩家死亡动画 
 	}
 
 	// 玩家血量变化信号链接操作
@@ -75,28 +75,28 @@ public partial class Player : CharacterBody2D
 	{
 		if (Velocity == Vector2.Zero)
 		{
-			playerAnimatedSprite.Play(currentAnimated + "idle");
+			_playerAnimatedSprite.Play(_currentAnimated + "idle");
 		}
 		else
 		{
-			currentAnimated = GetMovementDir();
-			playerAnimatedSprite.Play(currentAnimated + "move");
+			_currentAnimated = GetMovementDir();
+			_playerAnimatedSprite.Play(_currentAnimated + "move");
 
 			// 反转镜像
-			// playerBodyNode.Scale = new Vector2(x: Velocity.X < 0 ? -1 : 1, y: 1);
+			// _playerBodyNode.Scale = new Vector2(x: Velocity.X < 0 ? -1 : 1, y: 1);
 		}
 
 		Vector2 position = GetGlobalMousePosition();
 		weaponNode.LookAt(position);
 
-		if (position.X > Position.X && playerBodyNode.Scale.X != 1)
+		if (position.X > Position.X && _playerBodyNode.Scale.X != 1)
 		{
-			playerBodyNode.Scale = new Vector2(x: 1, y: 1);
+			_playerBodyNode.Scale = new Vector2(x: 1, y: 1);
 		}
 
-		if (position.X < Position.X && playerBodyNode.Scale.X != -1)
+		if (position.X < Position.X && _playerBodyNode.Scale.X != -1)
 		{
-			playerBodyNode.Scale = new Vector2(x: -1, y: 1);
+			_playerBodyNode.Scale = new Vector2(x: -1, y: 1);
 		}
 	}
 

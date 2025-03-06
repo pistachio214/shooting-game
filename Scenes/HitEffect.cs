@@ -1,18 +1,16 @@
 using Godot;
 using System;
-using System.Threading.Tasks;
 
 public partial class HitEffect : Node2D
 {
-	private GpuParticles2D partGPUParticles;
+	private GpuParticles2D _partGPUParticles;
 
 	public override void _Ready()
 	{
-		partGPUParticles = GetNode<GpuParticles2D>("PartGPUParticles");
+		_partGPUParticles = GetNode<GpuParticles2D>("PartGPUParticles");
+		_partGPUParticles.Emitting = true;
 
-		partGPUParticles.Connect(GpuParticles2D.SignalName.Finished, Callable.From(OnPartGPUParticlesFinished));
-
-		partGPUParticles.Emitting = true;
+		_partGPUParticles.Connect(GpuParticles2D.SignalName.Finished, Callable.From(OnPartGPUParticlesFinished));
 	}
 
 	public override void _Process(double delta)

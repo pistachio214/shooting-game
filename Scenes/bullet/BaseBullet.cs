@@ -3,14 +3,14 @@ using System;
 
 public partial class BaseBullet : Node2D
 {
+	[Export]
+	public float Speed = 500f; // 子弹速度
+
+	[Export]
+	public Vector2 Dir = Vector2.Zero; // 子弹飞行向量
+
 	// 击中的粒子器
-	private static readonly PackedScene preHitEffectPackedScene = GD.Load<PackedScene>("res://Scenes/HitEffect.tscn");
-
-	[Export]
-	public float speed = 500f; // 子弹速度
-
-	[Export]
-	public Vector2 dir = Vector2.Zero; // 子弹飞行向量
+	private static readonly PackedScene _preHitEffectPackedScene = GD.Load<PackedScene>("res://Scenes/HitEffect.tscn");
 
 	public BaseWeapon currentWeapon; // 当期子弹来自的枪械
 
@@ -24,7 +24,7 @@ public partial class BaseBullet : Node2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		GlobalPosition += dir * (float)delta * speed;
+		GlobalPosition += Dir * (float)delta * Speed;
 
 		_tick += delta;
 		//子弹3秒之后就销毁
@@ -45,7 +45,7 @@ public partial class BaseBullet : Node2D
 
 			SetPhysicsProcess(false);
 
-			HitEffect instance = preHitEffectPackedScene.Instantiate<HitEffect>();
+			HitEffect instance = _preHitEffectPackedScene.Instantiate<HitEffect>();
 			instance.GlobalPosition = GlobalPosition;
 
 			Game.Instance.map.AddChild(instance);

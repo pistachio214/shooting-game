@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Threading.Tasks;
 
 enum State
 {
@@ -14,30 +13,31 @@ enum State
 public partial class BaseEnemy : CharacterBody2D
 {
 	[Export]
-	private float speed = 30f; // 移动速度
+	private float Speed = 30f; // 移动速度
 
-	private Node2D bodyNode;
+	private Node2D _bodyNode;
 
-	private AnimatedSprite2D animatedSprite; // 怪物动画
+	private AnimatedSprite2D _animatedSprite; // 怪物动画
 
-	private State currentState = State.IDLE; // 当前怪物状态
+	private State _currentState = State.IDLE; // 当前怪物状态
 
-	private Player currentPlayer = null; // 当前目标玩家
+	private Player _currentPlayer = null; // 当前目标玩家
 
 	public EnemyData enemyData;
 
-	private CollisionShape2D enemyCollisionShape;
+	private CollisionShape2D _enemyCollisionShape;
 
-	private Sprite2D enemyShadowSprite;
+	private Sprite2D _enemyShadowSprite;
 
-	private AudioStreamPlayer2D hitAudioStreamPlayer;
+	private AudioStreamPlayer2D _hitAudioStreamPlayer;
+
 	public override void _Ready()
 	{
-		bodyNode = GetNode<Node2D>("Body");
-		animatedSprite = bodyNode.GetNode<AnimatedSprite2D>("AnimatedSprite");
-		enemyCollisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
-		enemyShadowSprite = GetNode<Sprite2D>("Shadow");
-		hitAudioStreamPlayer = GetNode<AudioStreamPlayer2D>("HitAudioStreamPlayer");
+		_bodyNode = GetNode<Node2D>("Body");
+		_animatedSprite = _bodyNode.GetNode<AnimatedSprite2D>("AnimatedSprite");
+		_enemyCollisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
+		_enemyShadowSprite = GetNode<Sprite2D>("Shadow");
+		_hitAudioStreamPlayer = GetNode<AudioStreamPlayer2D>("HitAudioStreamPlayer");
 
 		EnemyManager.Instance.enemyList.Add(this);
 		enemyData = new EnemyData(); // 暂时直接创建，后续会修改为动态创建
@@ -48,7 +48,7 @@ public partial class BaseEnemy : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (currentState == State.DETAH || currentState == State.ATK || currentState == State.HIT)
+		if (_currentState == State.DETAH || _currentState == State.ATK || _currentState == State.HIT)
 		{
 			return;
 		}
@@ -60,7 +60,7 @@ public partial class BaseEnemy : CharacterBody2D
 		else
 		{
 			// 怪物的世界坐标
-			Velocity = GlobalPosition.DirectionTo(Game.Instance.player.GlobalPosition) * speed;
+			Velocity = GlobalPosition.DirectionTo(Game.Instance.player.GlobalPosition) * Speed;
 		}
 
 		MoveAndSlide();
@@ -70,25 +70,25 @@ public partial class BaseEnemy : CharacterBody2D
 
 	private void OnHit(int damage)
 	{
-		currentState = State.HIT;
+		_currentState = State.HIT;
 		// 中枪音效
-		hitAudioStreamPlayer.Play();
+		_hitAudioStreamPlayer.Play();
 
 		Game.Instance.ShowLabel(this, $"-{damage}");
 
-		animatedSprite.Play("hit");
+		_animatedSprite.Play("hit");
 	}
 
 	private void OnDeath()
 	{
-		if (currentState == State.DETAH)
+		if (_currentState == State.DETAH)
 		{
 			return;
 		}
-		currentState = State.DETAH;
-		enemyCollisionShape.CallDeferred("set_disabled", true);
-		animatedSprite.Play("death");
-		enemyShadowSprite.Hide();
+		_currentState = State.DETAH;
+		_enemyCollisionShape.CallDeferred("set_disabled", true);
+		_animatedSprite.Play("death");
+		_enemyShadowSprite.Hide();
 	}
 
 	// 离开场景树时自动触发
@@ -103,44 +103,44 @@ public partial class BaseEnemy : CharacterBody2D
 	{
 		if (Velocity == Vector2.Zero)
 		{
-			animatedSprite.Play("idle");
-			currentState = State.IDLE;
+			_animatedSprite.Play("idle");
+			_currentState = State.IDLE;
 		}
 		else
 		{
-			animatedSprite.Play("move");
-			currentState = State.MOVE;
-			bodyNode.Scale = new Vector2(x: Velocity.X < 0 ? -1 : 1, y: 1);
+			_animatedSprite.Play("move");
+			_currentState = State.MOVE;
+			_bodyNode.Scale = new Vector2(x: Velocity.X < 0 ? -1 : 1, y: 1);
 		}
 	}
 
 	public void OnAtkAreaBodyEntered(Node2D body)
 	{
-		if (body is Player player && currentState != State.DETAH)
+		if (body is Player player && _currentState != State.DETAH)
 		{
-			currentPlayer = player;
-			currentState = State.ATK;
-			animatedSprite.Play("atk");
+			_currentPlayer = player;
+			_currentState = State.ATK;
+			_animatedSprite.Play("atk");
 		}
 	}
 
 	public void OnAtkAreaBodyExited(Node2D body)
 	{
-		if (body is Player player && player == currentPlayer)
+		if (body is Player player && player == _currentPlayer)
 		{
-			currentPlayer = null;
+			_currentPlayer = null;
 		}
 	}
 
 	public void OnAnimatedSpriteFrameChanged()
 	{
-		if (currentState == State.ATK && animatedSprite.Animation == "atk")
+		if (_currentState == State.ATK && _animatedSprite.Animation == "atk")
 		{
 			// 确定动画第二帧为攻击帧
-			if (currentPlayer != null && animatedSprite.Frame == 2)
+			if (_currentPlayer != null && _animatedSprite.Frame == 2)
 			{
 				// 造成伤害动作
-				Game.Damage(this, currentPlayer);
+				Game.Damage(this, _currentPlayer);
 			}
 		}
 	}
@@ -148,25 +148,25 @@ public partial class BaseEnemy : CharacterBody2D
 	// 动画结束后，判断是否继续攻击或者恢复到move状态
 	public void OnAnimatedSpriteAnimationFinished()
 	{
-		if (currentState == State.HIT && animatedSprite.Animation == "hit")
+		if (_currentState == State.HIT && _animatedSprite.Animation == "hit")
 		{
-			currentState = State.IDLE;
+			_currentState = State.IDLE;
 		}
 
-		if (currentState == State.DETAH && animatedSprite.Animation == "death")
+		if (_currentState == State.DETAH && _animatedSprite.Animation == "death")
 		{
 			QueueFree();
 		}
 
-		if (currentState == State.ATK && animatedSprite.Animation == "atk")
+		if (_currentState == State.ATK && _animatedSprite.Animation == "atk")
 		{
-			if (currentPlayer != null && !PlayerManager.Instance.IsDeath())
+			if (_currentPlayer != null && !PlayerManager.Instance.IsDeath())
 			{
-				animatedSprite.Play("atk");
+				_animatedSprite.Play("atk");
 			}
 			else
 			{
-				currentState = State.IDLE;
+				_currentState = State.IDLE;
 			}
 		}
 	}

@@ -4,37 +4,37 @@ using System;
 public partial class LevelData : Resource
 {
     [Export]
-    public PackedScene enemyPackedScene; // 关卡怪物
+    public PackedScene EnemyPackedScene; // 关卡怪物
 
     [Export]
-    public int enemyCount; // 怪物数量
+    public int EnemyCount; // 怪物数量
 
     [Export]
-    public float tick; // 刷怪间隔
+    public float Tick; // 刷怪间隔
 
     [Export]
-    public int onceCount; // 单次数量
+    public int OnceCount; // 单次数量
 
 
-    private int currentCount = 0; // 当前已刷新多少怪物
+    private int _currentCount = 0; // 当前已刷新多少怪物
 
     public void CreateEnemy()
     {
-        for (int i = 0; i < onceCount; i++)
+        for (int i = 0; i < OnceCount; i++)
         {
             // 刷怪数量超过怪物数量,就停止刷新更多
-            if (currentCount >= enemyCount)
+            if (_currentCount >= EnemyCount)
             {
                 LevelManager.Instance.Stop();
                 return;
             }
 
-            BaseEnemy instance = enemyPackedScene.Instantiate<BaseEnemy>();
+            BaseEnemy instance = EnemyPackedScene.Instantiate<BaseEnemy>();
             instance.GlobalPosition = GetRandomPoint();
 
             Game.Instance.map.AddChild(instance);
 
-            currentCount += 1;
+            _currentCount += 1;
         }
     }
 
