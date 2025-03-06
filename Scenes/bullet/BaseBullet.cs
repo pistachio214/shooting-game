@@ -14,7 +14,6 @@ public partial class BaseBullet : Node2D
 
 	public BaseWeapon currentWeapon; // 当期子弹来自的枪械
 
-
 	private double _tick = 0;
 
 	public override void _Ready()
