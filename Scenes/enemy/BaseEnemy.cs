@@ -7,7 +7,8 @@ enum State
 	IDLE,
 	MOVE,
 	ATK,
-	DETAH
+	DETAH,
+	HIT
 }
 
 public partial class BaseEnemy : CharacterBody2D
@@ -29,12 +30,14 @@ public partial class BaseEnemy : CharacterBody2D
 
 	private Sprite2D enemyShadowSprite;
 
+	private AudioStreamPlayer2D hitAudioStreamPlayer;
 	public override void _Ready()
 	{
 		bodyNode = GetNode<Node2D>("Body");
 		animatedSprite = bodyNode.GetNode<AnimatedSprite2D>("AnimatedSprite");
 		enemyCollisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
 		enemyShadowSprite = GetNode<Sprite2D>("Shadow");
+		hitAudioStreamPlayer = GetNode<AudioStreamPlayer2D>("HitAudioStreamPlayer");
 
 		EnemyManager.Instance.enemyList.Add(this);
 		enemyData = new EnemyData(); // 暂时直接创建，后续会修改为动态创建
@@ -45,7 +48,7 @@ public partial class BaseEnemy : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (currentState == State.DETAH || currentState == State.ATK)
+		if (currentState == State.DETAH || currentState == State.ATK || currentState == State.HIT)
 		{
 			return;
 		}
@@ -67,7 +70,13 @@ public partial class BaseEnemy : CharacterBody2D
 
 	private void OnHit(int damage)
 	{
+		currentState = State.HIT;
+		// 中枪音效
+		hitAudioStreamPlayer.Play();
+
 		Game.Instance.ShowLabel(this, $"-{damage}");
+
+		animatedSprite.Play("hit");
 	}
 
 	private void OnDeath()
@@ -139,6 +148,11 @@ public partial class BaseEnemy : CharacterBody2D
 	// 动画结束后，判断是否继续攻击或者恢复到move状态
 	public void OnAnimatedSpriteAnimationFinished()
 	{
+		if (currentState == State.HIT && animatedSprite.Animation == "hit")
+		{
+			currentState = State.IDLE;
+		}
+
 		if (currentState == State.DETAH && animatedSprite.Animation == "death")
 		{
 			QueueFree();

@@ -16,7 +16,7 @@ public partial class BaseBullet : Node2D
 		LookAt(GetGlobalMousePosition());
 	}
 
-	public override void _PhysicsProcess(double delta)
+	public override void _Process(double delta)
 	{
 		//TODO 子弹超出可视范围就销毁
 

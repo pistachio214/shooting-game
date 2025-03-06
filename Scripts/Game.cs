@@ -64,4 +64,12 @@ public partial class Game : Node
 		map.AddChild(instance);
 		instance.SetText(text);
 	}
+
+	// 相机震动,增强视觉表现
+	public void CameraOffset(Vector2 offset, double time)
+	{
+		Tween tween = CreateTween();
+
+		tween.TweenProperty(player.camera, "offset", Vector2.Zero, time).From(offset);
+	}
 }

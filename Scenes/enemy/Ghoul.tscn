@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://be7bqfhhxetq3"]
+[gd_scene load_steps=35 format=3 uid="uid://be7bqfhhxetq3"]
 
 [ext_resource type="PackedScene" uid="uid://dv8j3i7nf7kq5" path="res://Scenes/enemy/BaseEnemy.tscn" id="1_cjfb6"]
 [ext_resource type="Texture2D" uid="uid://clci8750mx755" path="res://Texture/Ghoul/Ghoul Sprite Sheet 62 x 33.png" id="2_eopkb"]
@@ -58,6 +58,22 @@ region = Rect2(310, 132, 62, 33)
 [sub_resource type="AtlasTexture" id="AtlasTexture_o83xi"]
 atlas = ExtResource("2_eopkb")
 region = Rect2(372, 132, 62, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2knj8"]
+atlas = ExtResource("2_eopkb")
+region = Rect2(0, 99, 62, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jqs42"]
+atlas = ExtResource("2_eopkb")
+region = Rect2(62, 99, 62, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wg10b"]
+atlas = ExtResource("2_eopkb")
+region = Rect2(124, 99, 62, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5exwd"]
+atlas = ExtResource("2_eopkb")
+region = Rect2(186, 99, 62, 33)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1tl30"]
 atlas = ExtResource("2_eopkb")
@@ -167,6 +183,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_2knj8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jqs42")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wg10b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5exwd")
+}],
+"loop": false,
+"name": &"hit",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_1tl30")
 }, {
 "duration": 1.0,
@@ -223,8 +256,10 @@ position = Vector2(2, -12)
 [node name="AnimatedSprite" parent="Body" index="0"]
 position = Vector2(2, -15)
 sprite_frames = SubResource("SpriteFrames_jf5w2")
-animation = &"death"
+animation = &"hit"
 autoplay = "idle"
+frame = 3
+frame_progress = 1.0
 
 [node name="AtkArea" parent="." index="3"]
 collision_layer = 0

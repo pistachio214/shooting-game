@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dv8j3i7nf7kq5"]
+[gd_scene load_steps=7 format=3 uid="uid://dv8j3i7nf7kq5"]
 
 [ext_resource type="Texture2D" uid="uid://bruslgw43o0fw" path="res://Texture/Without Sword (for gun)/shadow.png" id="1_m88s0"]
 [ext_resource type="Script" uid="uid://cxctceg7y1c5" path="res://Scenes/enemy/BaseEnemy.cs" id="1_yhvo1"]
+[ext_resource type="AudioStream" uid="uid://d2g2sgj3cokxh" path="res://Audios/physics_body_impact_bullet_1.mp3" id="3_oo4iy"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c0lp0"]
 radius = 5.0
@@ -45,3 +46,8 @@ position = Vector2(1, -12)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_krsa2")
 debug_color = Color(0.823489, 0.344165, 0.534196, 0.42)
+
+[node name="HitAudioStreamPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_oo4iy")
+volume_db = -8.0
+max_distance = 500.0

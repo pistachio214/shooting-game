@@ -14,6 +14,8 @@ public partial class Player : CharacterBody2D
 
 	public Node2D weaponNode;
 
+	public Camera2D camera;
+
 	public override void _Ready()
 	{
 		// 将玩家对象加入到游戏单例中
@@ -22,6 +24,7 @@ public partial class Player : CharacterBody2D
 		playerBodyNode = GetNode<Node2D>("Body");
 		playerAnimatedSprite = playerBodyNode.GetNode<AnimatedSprite2D>("AnimatedSprite");
 		weaponNode = playerBodyNode.GetNode<Node2D>("WeaponNode");
+		camera = GetNode<Camera2D>("Camera2D");
 
 		// 链接信号
 		ConnectSignals();

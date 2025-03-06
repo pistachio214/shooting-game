@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://c8f13wyyqqsvx"]
+[gd_scene load_steps=11 format=3 uid="uid://c8f13wyyqqsvx"]
 
 [ext_resource type="Texture2D" uid="uid://rsfj2l2m4kxo" path="res://Texture/Guns/gun1.png" id="1_0bqbo"]
 [ext_resource type="Script" uid="uid://ck6h6gkexqrxs" path="res://Scenes/weapon/BaseWeapon.cs" id="1_ac1dy"]
+[ext_resource type="AudioStream" uid="uid://cmhb7xg5myk7" path="res://Audios/wpn_fire_hk416.mp3" id="3_raamt"]
 
 [sub_resource type="Curve" id="Curve_ch06v"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.737418, 0.994628), 0.0, 0.0, 0, 0, Vector2(0.980306, 0.027686), 0.0, 0.0, 0, 0]
@@ -40,7 +41,9 @@ alpha_curve = SubResource("CurveTexture_raamt")
 script = ExtResource("1_ac1dy")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-1, 0)
 texture = ExtResource("1_0bqbo")
+offset = Vector2(4, 0)
 
 [node name="BulletPoint" type="Node2D" parent="."]
 position = Vector2(5, -1)
@@ -54,3 +57,7 @@ one_shot = true
 explosiveness = 1.0
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_2b650")
+
+[node name="FiringSoundAudioStreamPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_raamt")
+volume_db = -5.0

@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Threading.Tasks;
 
 public partial class BaseWeapon : Node2D
 {
@@ -31,11 +30,14 @@ public partial class BaseWeapon : Node2D
 
 	public Player player; // 属于某个玩家
 
+	private AudioStreamPlayer2D firingSoundAudioStreamPlayer; // 开枪音效
+
 	public override void _Ready()
 	{
 		sprite = GetNode<Sprite2D>("Sprite2D");
 		bulletPointNode = GetNode<Node2D>("BulletPoint");
 		fireParticles = GetNode<GpuParticles2D>("GPUParticles2D");
+		firingSoundAudioStreamPlayer = GetNode<AudioStreamPlayer2D>("FiringSoundAudioStreamPlayer");
 
 		fireParticles.Lifetime = weaponRof - 0.01; // 设置粒子存活时间略小于射击间隔
 
@@ -97,12 +99,26 @@ public partial class BaseWeapon : Node2D
 		// 发送信号到PlayerManager的OnBulletCountChanged,告诉它子弹数量减少了
 		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnBulletCountChanged, currentBulletCount, bulletMax);
 
-		fireParticles.Restart();
-
 		// 子弹清空,则自动切换弹匣
 		if (currentBulletCount <= 0)
 		{
 			Reload();
 		}
+
+		WeaponAnim();
+	}
+
+	private void WeaponAnim()
+	{
+		fireParticles.Restart();
+
+		Tween tween = CreateTween().SetEase(Tween.EaseType.In);
+		tween.TweenProperty(sprite, "scale:x", 0.7, weaponRof / 2);
+		tween.TweenProperty(sprite, "scale:x", 1.0, weaponRof / 2);
+
+		firingSoundAudioStreamPlayer.Play();
+
+		Vector2 offset = new Vector2(-0.5f, 1);
+		Game.Instance.CameraOffset(offset, weaponRof);
 	}
 }
