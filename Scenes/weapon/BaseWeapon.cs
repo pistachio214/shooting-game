@@ -46,7 +46,6 @@ public partial class BaseWeapon : Node2D
 
 		// 枪械加载完成后,发射一次切换枪械的信号,说明此时已经切换到当前武器
 		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnWeaponChanged, this);
-
 		// 切换武器的时候,同时更新子弹数量文本
 		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnBulletCountChanged, _currentBulletCount, BulletMax);
 	}
