@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_q653t")
-enemyPackedScene = ExtResource("1_gnwik")
-enemyCount = 5
-tick = 1.0
-onceCount = 3
+EnemyPackedScene = ExtResource("1_gnwik")
+EnemyCount = 10
+Tick = 0.2
+OnceCount = 1
