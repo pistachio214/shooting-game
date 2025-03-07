@@ -14,7 +14,9 @@ public partial class LevelManager : Node
 
 	public int currentLevel = 0; // 当前关卡
 
-	private readonly List<LevelData> _levelList = [];
+	private readonly List<Resource> _levelList = [
+		
+	];
 
 	public override void _Ready()
 	{
@@ -30,9 +32,9 @@ public partial class LevelManager : Node
 
 		string[] files = DirAccess.GetFilesAt(LEVEL_PATH);
 
-		for (int i = 0; i < files.Count(); i++)
+		for (int i = 0; i < files.Length; i++)
 		{
-			_levelList.Add(GD.Load<LevelData>(LEVEL_PATH + files[i]));
+			_levelList.Add(GD.Load<Resource>(LEVEL_PATH + files[i]));
 		}
 	}
 
