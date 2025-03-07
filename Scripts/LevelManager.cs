@@ -15,7 +15,11 @@ public partial class LevelManager : Node
 	public int currentLevel = 0; // 当前关卡
 
 	private readonly List<Resource> _levelList = [
-		
+		GD.Load<Resource>(LEVEL_PATH + "level1.tres"),
+		GD.Load<Resource>(LEVEL_PATH + "level2.tres"),
+		GD.Load<Resource>(LEVEL_PATH + "level3.tres"),
+		GD.Load<Resource>(LEVEL_PATH + "level4.tres"),
+		GD.Load<Resource>(LEVEL_PATH + "level5.tres"),
 	];
 
 	public override void _Ready()
@@ -30,12 +34,12 @@ public partial class LevelManager : Node
 			QueueFree(); // 防止重复创建
 		}
 
-		string[] files = DirAccess.GetFilesAt(LEVEL_PATH);
+		// string[] files = DirAccess.GetFilesAt(LEVEL_PATH);
 
-		for (int i = 0; i < files.Length; i++)
-		{
-			_levelList.Add(GD.Load<Resource>(LEVEL_PATH + files[i]));
-		}
+		// for (int i = 0; i < files.Length; i++)
+		// {
+		// 	_levelList.Add(GD.Load<Resource>(LEVEL_PATH + files[i]));
+		// }
 	}
 
 	// 下一关方法
