@@ -4,10 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://bk10iqntyeinh" path="res://Texture/Guns/gun2.png" id="2_ak51g"]
 
 [node name="BaseWeapon" instance=ExtResource("1_dax7l")]
-weaponName = "2号枪械"
-bulletMax = 60
-damage = 7
-weaponRof = 0.3
+WeaponName = "2号枪械"
+BulletMax = 60
+Damage = 10
+WeaponRof = 0.3
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("2_ak51g")
