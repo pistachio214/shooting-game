@@ -37,7 +37,7 @@ scale_curve = SubResource("CurveTexture_scnfr")
 color_ramp = SubResource("GradientTexture1D_pb3kv")
 alpha_curve = SubResource("CurveTexture_raamt")
 
-[node name="BaseWeapon" type="Node2D"]
+[node name="BaseWeapon2" type="Node2D"]
 script = ExtResource("1_ac1dy")
 WeaponRof = 0.12
 
