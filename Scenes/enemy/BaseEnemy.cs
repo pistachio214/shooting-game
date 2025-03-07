@@ -31,6 +31,10 @@ public partial class BaseEnemy : CharacterBody2D
 
 	private AudioStreamPlayer2D _hitAudioStreamPlayer;
 
+	private NavigationAgent2D _navigationAgent; // 动态避障
+
+	private float _movementDelta;
+
 	public override void _Ready()
 	{
 		_bodyNode = GetNode<Node2D>("Body");
@@ -38,6 +42,10 @@ public partial class BaseEnemy : CharacterBody2D
 		_enemyCollisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
 		_enemyShadowSprite = GetNode<Sprite2D>("Shadow");
 		_hitAudioStreamPlayer = GetNode<AudioStreamPlayer2D>("HitAudioStreamPlayer");
+		_navigationAgent = GetNode<NavigationAgent2D>("NavigationAgent2D");
+
+		// 设置导航最大的速度等于怪物的移动速度
+		_navigationAgent.MaxSpeed = Speed;
 
 		EnemyManager.Instance.enemyList.Add(this);
 		enemyData = new EnemyData(); // 暂时直接创建，后续会修改为动态创建
@@ -48,24 +56,38 @@ public partial class BaseEnemy : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (_currentState == State.DETAH || _currentState == State.ATK || _currentState == State.HIT)
+		// 每2个物理帧进行物理更新
+		if (Engine.GetPhysicsFrames() % 2 == 0)
+		{
+			SetMovementTarget(Game.Instance.player.GlobalPosition);
+		}
+
+		if (NavigationServer2D.MapGetIterationId(_navigationAgent.GetNavigationMap()) == 0)
 		{
 			return;
 		}
 
-		if (PlayerManager.Instance.IsDeath())
+		if (_navigationAgent.IsNavigationFinished())
 		{
-			Velocity = Vector2.Zero;
+			return;
 		}
-		else
+
+		_movementDelta = Speed * (float)delta;
+		Vector2 nextPathPosition = _navigationAgent.GetNextPathPosition();
+		Vector2 newVelocity = GlobalPosition.DirectionTo(nextPathPosition) * _movementDelta;
+		if (_navigationAgent.AvoidanceEnabled)
 		{
-			// 怪物的世界坐标
-			Velocity = GlobalPosition.DirectionTo(Game.Instance.player.GlobalPosition) * Speed;
+			_navigationAgent.SetVelocity(newVelocity);
 		}
 
 		MoveAndSlide();
 
 		ChangeAnimated();
+	}
+
+	private void SetMovementTarget(Vector2 movementTarget)
+	{
+		_navigationAgent.SetTargetPosition(movementTarget);
 	}
 
 	private void OnHit(int damage)
@@ -110,7 +132,7 @@ public partial class BaseEnemy : CharacterBody2D
 		{
 			_animatedSprite.Play("move");
 			_currentState = State.MOVE;
-			_bodyNode.Scale = new Vector2(x: Velocity.X < 0 ? -1 : 1, y: 1);
+			_bodyNode.Scale = new Vector2(x: !IsFacingTarget() && Velocity.X < 0 ? -1 : 1, y: 1);
 		}
 	}
 
@@ -169,6 +191,36 @@ public partial class BaseEnemy : CharacterBody2D
 				_currentState = State.IDLE;
 			}
 		}
+	}
+
+	// 安全避障信号
+	public void OnNavigationAgentVelocityComputed(Vector2 safeVelocity)
+	{
+		if (_currentState == State.DETAH || _currentState == State.ATK || _currentState == State.HIT)
+		{
+			return;
+		}
+
+		if (PlayerManager.Instance.IsDeath())
+		{
+			Velocity = Vector2.Zero;
+		}
+		else
+		{
+			Velocity = safeVelocity * Speed;
+		}
+	}
+
+	// 编写方法，实现怪物是否朝向玩家
+	private bool IsFacingTarget()
+	{
+		Vector2 dirToTarget = (Game.Instance.player.GlobalPosition - GlobalPosition).Normalized();
+
+		Vector2 facingDir = Transform.X.Normalized();
+
+		float dot = facingDir.Dot(dirToTarget);
+
+		return dot >= (1 - 0.7);
 	}
 
 }

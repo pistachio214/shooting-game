@@ -30,7 +30,7 @@ public partial class LevelData : Resource
             }
 
             BaseEnemy instance = EnemyPackedScene.Instantiate<BaseEnemy>();
-            instance.GlobalPosition = GetRandomPoint();
+            instance.Position = GetRandomPoint();
 
             Game.Instance.map.AddChild(instance);
 
@@ -42,17 +42,18 @@ public partial class LevelData : Resource
     private static Vector2 GetRandomPoint()
     {
         Main gameMain = Game.Instance.map as Main;
-        Area2D enemyArea = gameMain.enemyArea;
+        TileMapLayer mapLayer = gameMain.mapTileMapLayer;
 
-        CollisionShape2D collision = enemyArea.GetNode<CollisionShape2D>("CollisionShape2D");
-        Rect2 rect = collision.Shape.GetRect();
+        Rect2I rect = mapLayer.GetUsedRect(); // 获取实际使用的矩阵
 
-        float vectorX = (float)GD.RandRange(-rect.Size.X, rect.Size.X);
-        float vectorY = (float)GD.RandRange(-rect.Size.Y, rect.Size.Y);
+        // CollisionShape2D collision = enemyArea.GetNode<CollisionShape2D>("CollisionShape2D");
+        // Rect2 rect = collision.Shape.GetRect();
 
-        Vector2 point = new Vector2(vectorX, vectorY);
+        int Vector2IX = GD.RandRange(rect.Position.X, rect.Position.X + rect.Size.X);
+        int Vector2IY = GD.RandRange(rect.Position.Y, rect.Position.Y + rect.Size.Y);
 
-        return rect.Position + point;
+        Vector2I point = new Vector2I(Vector2IX, Vector2IY);
 
+        return mapLayer.MapToLocal(point);
     }
 }
