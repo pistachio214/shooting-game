@@ -35,17 +35,15 @@ public partial class MainUi : Control
 
         Tween tween = CreateTween();
         tween.Parallel().TweenProperty(colorRect, "modulate:a", 1.0, 0.2).From(0.0); // Parallel表示并行运行动画
-         tween.TweenCallback(
-            Callable.From(() =>
-                {
-                    _gameEntryControl.Hide();
+        tween.TweenCallback(Callable.From(() =>
+        {
+            _gameEntryControl.Hide();
 
-                    // Plan A: 直接跳转到主界面
-                    // GetTree().ChangeSceneToFile("uid://bso2svt0qvblh");
+            // Plan A: 直接跳转到主界面
+            // GetTree().ChangeSceneToFile("uid://bso2svt0qvblh");
 
-                    // Plan B: 发送游戏开始信号
-                    Game.Instance.EmitSignal(Game.SignalName.OnGameStart);
-                })
-        );
+            // Plan B: 发送游戏开始信号
+            Game.Instance.EmitSignal(Game.SignalName.OnGameStart);
+        }));
     }
 }

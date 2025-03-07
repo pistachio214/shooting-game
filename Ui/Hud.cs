@@ -14,6 +14,8 @@ public partial class Hud : Control
 
 	private Label _levelLabel;
 
+	private TextureRect _crossTextureRect;
+
 	public override void _Ready()
 	{
 		_progressBar = GetNode<ProgressBar>("HpControl/HpBar");
@@ -21,6 +23,7 @@ public partial class Hud : Control
 		_weaponNameLabel = GetNode<Label>("WeaponHUDControl/WeaponName");
 		_weaponTextureRect = GetNode<TextureRect>("WeaponHUDControl/TextureRect");
 		_levelLabel = GetNode<Label>("LevelLabel");
+		_crossTextureRect = GetNode<TextureRect>("CrossTextureRect");
 
 		// 链接PlayerManager -> OnPlayerHpChanged信号
 		PlayerManager.Instance.Connect(PlayerManager.SignalName.OnPlayerHpChanged, Callable.From<int, int>(OnPlayerHpChanged));
@@ -37,11 +40,19 @@ public partial class Hud : Control
 		// 链接LevelManager -> OnLevelChange
 		LevelManager.Instance.Connect(LevelManager.SignalName.OnLevelChange, Callable.From<LevelData>(OnLevelChange));
 
+		// 游戏开始,隐藏原本的鼠标(只显示准星)
+		// Game.Instance.Connect(Game.SignalName.OnGameStart, Callable.From(() =>
+		// {
+		// 	Input.MouseMode = Input.MouseModeEnum.ConfinedHidden;
+		// }));
+
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		// 准星跟随鼠标
+		// _crossTextureRect.Position = GetGlobalMousePosition() - _crossTextureRect.Size / 2;
 	}
 
 	private void OnPlayerHpChanged(int currentHp, int maxHp)
@@ -57,6 +68,7 @@ public partial class Hud : Control
 
 	private void OnWeaponReload()
 	{
+		Game.Instance.ShowLabel(Game.Instance.player, "正在换弹中");
 		_bulletLabel.Text = "换弹中...";
 	}
 

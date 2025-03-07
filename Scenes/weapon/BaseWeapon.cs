@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class BaseWeapon : Node2D
 {
@@ -25,6 +26,13 @@ public partial class BaseWeapon : Node2D
 
 	private AudioStreamPlayer2D _firingSoundAudioStreamPlayer; // 开枪音效
 
+	private AudioStreamPlayer2D _toggleSoundAudioStreamPlayer; // 换弹音效
+
+	private readonly List<string> _toggleSoundList = [
+		"res://Audios/wpn_reload_start.mp3",
+		"res://Audios/wpn_reload_end.mp3"
+	];
+
 	public Sprite2D sprite;
 
 	private Node2D bulletPointNode;
@@ -35,6 +43,7 @@ public partial class BaseWeapon : Node2D
 	{
 		_fireParticles = GetNode<GpuParticles2D>("GPUParticles2D");
 		_firingSoundAudioStreamPlayer = GetNode<AudioStreamPlayer2D>("FiringSoundAudioStreamPlayer");
+		_toggleSoundAudioStreamPlayer = GetNode<AudioStreamPlayer2D>("ToggleSoundAudioStreamPlayer");
 
 		sprite = GetNode<Sprite2D>("Sprite2D");
 		bulletPointNode = GetNode<Node2D>("BulletPoint");
@@ -65,14 +74,29 @@ public partial class BaseWeapon : Node2D
 	// 更换弹匣(重置枪械子弹)
 	private void Reload()
 	{
+		// 换弹音效起
+		_toggleSoundAudioStreamPlayer.Stream = GD.Load<AudioStream>(_toggleSoundList[0]);
+		_toggleSoundAudioStreamPlayer.Play();
+
 		// 发送信号到PlayerManager的OnWeaponReload信号,告诉它切换弹匣了
 		PlayerManager.Instance.EmitSignal(PlayerManager.SignalName.OnWeaponReload);
+
+		// 等待两秒切换播放弹夹切换停止声音
+		SceneTreeTimer treeTimer = GetTree().CreateTimer(2 - 0.42);
+		treeTimer.Connect(SceneTreeTimer.SignalName.Timeout, Callable.From(WaitingWeaponReload));
+	}
+
+	private void WaitingWeaponReload()
+	{
+		// 换弹音效止
+		_toggleSoundAudioStreamPlayer.Stream = GD.Load<AudioStream>(_toggleSoundList[1]);
+		_toggleSoundAudioStreamPlayer.Play();
 
 		// 模拟切换弹匣需要2秒 Plan 1:
 		// GetTree().CreateTimer(2f).Timeout += OnWeaponReload;
 
 		// 模拟切换弹匣需要2秒 Plan 2:
-		SceneTreeTimer treeTimer = GetTree().CreateTimer(2f);
+		SceneTreeTimer treeTimer = GetTree().CreateTimer(0.42);
 		treeTimer.Connect(SceneTreeTimer.SignalName.Timeout, Callable.From(OnWeaponReload));
 	}
 

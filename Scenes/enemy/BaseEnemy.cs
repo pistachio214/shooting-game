@@ -35,8 +35,12 @@ public partial class BaseEnemy : CharacterBody2D
 
 	private float _movementDelta;
 
+	private double _tick = 0;
+
 	public override void _Ready()
 	{
+		_tick = GD.RandRange(120, 240);
+
 		_bodyNode = GetNode<Node2D>("Body");
 		_animatedSprite = _bodyNode.GetNode<AnimatedSprite2D>("AnimatedSprite");
 		_enemyCollisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
@@ -45,7 +49,7 @@ public partial class BaseEnemy : CharacterBody2D
 		_navigationAgent = GetNode<NavigationAgent2D>("NavigationAgent2D");
 
 		// 设置导航最大的速度等于怪物的移动速度
-		_navigationAgent.MaxSpeed = Speed;
+		// _navigationAgent.MaxSpeed = Speed;
 
 		EnemyManager.Instance.enemyList.Add(this);
 		enemyData = new EnemyData(); // 暂时直接创建，后续会修改为动态创建
@@ -54,12 +58,20 @@ public partial class BaseEnemy : CharacterBody2D
 		enemyData.Connect(EnemyData.SignalName.OnDeath, Callable.From(OnDeath));
 	}
 
-	public override void _PhysicsProcess(double delta)
+	public override void _Process(double delta)
 	{
-		// 每2个物理帧进行物理更新
-		if (Engine.GetPhysicsFrames() % 2 == 0)
+		// 切换到空闲帧来执行怪物的移动 每2个物理帧进行物理更新
+		if (Engine.GetProcessFrames() % _tick == 0)
 		{
 			SetMovementTarget(Game.Instance.player.GlobalPosition);
+		}
+	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		if (_currentState == State.DETAH || _currentState == State.ATK || _currentState == State.HIT)
+		{
+			return;
 		}
 
 		if (NavigationServer2D.MapGetIterationId(_navigationAgent.GetNavigationMap()) == 0)
@@ -72,7 +84,7 @@ public partial class BaseEnemy : CharacterBody2D
 			return;
 		}
 
-		_movementDelta = Speed * (float)delta;
+		_movementDelta = Speed;
 		Vector2 nextPathPosition = _navigationAgent.GetNextPathPosition();
 		Vector2 newVelocity = GlobalPosition.DirectionTo(nextPathPosition) * _movementDelta;
 		if (_navigationAgent.AvoidanceEnabled)
@@ -207,7 +219,8 @@ public partial class BaseEnemy : CharacterBody2D
 		}
 		else
 		{
-			Velocity = safeVelocity * Speed;
+			Velocity = safeVelocity * Speed * 50;
+			MoveAndSlide();
 		}
 	}
 

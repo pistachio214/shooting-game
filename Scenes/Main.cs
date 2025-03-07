@@ -39,6 +39,11 @@ public partial class Main : Node2D
 
         // 添加玩家
         Player player = _prePlayerPackedScene.Instantiate<Player>();
+
+        Rect2I rect = mapTileMapLayer.GetUsedRect(); // 获取实际使用的矩阵
+        player.Position = mapTileMapLayer.MapToLocal(rect.GetCenter()); // 让玩家在矩阵中心出现
+        player.CollisionMask = 1;
+
         AddChild(player);
     }
 }

@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://8gv7he84tuwl"]
+[gd_scene load_steps=8 format=3 uid="uid://8gv7he84tuwl"]
 
 [ext_resource type="Script" uid="uid://dfgvn0lelyx3u" path="res://Ui/GameCanvasLayer.cs" id="1_2xa2f"]
 [ext_resource type="Script" uid="uid://w1fbybyymsos" path="res://Ui/Hud.cs" id="1_gipns"]
 [ext_resource type="Texture2D" uid="uid://rsfj2l2m4kxo" path="res://Texture/Guns/gun1.png" id="2_2xa2f"]
+[ext_resource type="Texture2D" uid="uid://b57e6beq38vlu" path="res://Texture/crosshair161.png" id="4_mtsvl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3j55r"]
 bg_color = Color(0, 0, 0, 0.270588)
@@ -133,3 +134,12 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_2xa2f")
 text = "关卡: 1"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CrossTextureRect" type="TextureRect" parent="HUD"]
+visible = false
+offset_right = 32.0
+offset_bottom = 32.0
+pivot_offset = Vector2(16, 16)
+texture = ExtResource("4_mtsvl")
+expand_mode = 1
+stretch_mode = 6

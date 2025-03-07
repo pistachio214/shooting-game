@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://doblgnhpornch"]
+
+[ext_resource type="PackedScene" uid="uid://be7bqfhhxetq3" path="res://Scenes/enemy/Ghoul.tscn" id="1_sg0v1"]
+[ext_resource type="Script" uid="uid://r81eu3y0c3fl" path="res://Scripts/LevelData.cs" id="2_1rgor"]
+
+[resource]
+script = ExtResource("2_1rgor")
+EnemyPackedScene = ExtResource("1_sg0v1")
+EnemyCount = 50
+Tick = 0.3
+OnceCount = 2
