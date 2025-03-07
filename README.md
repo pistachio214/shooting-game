@@ -1,5 +1,5 @@
 # Shooting game
 
 ```
- Godot4.3 创建的2D游戏
+ Godot4.4 创建的2D游戏
 ```
